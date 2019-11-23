@@ -1,22 +1,84 @@
-var y = 0;
-var x = 0;
+//pac man clone
 
-function draw() {
+//variables de configuration
+var crossing = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+	[0, 4, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 4, 0],
+	[0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+	[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+	[0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0],
+	[0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+	[0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+	[2, 2, 2, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 2, 2, 2],
+	[0, 0, 0, 0, 1, 0, 1, 0, 0, 3, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+	[2, 2, 2, 2, 1, 1, 1, 0, 3, 3, 3, 0, 1, 1, 1, 2, 2, 2, 2],
+	[0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+	[2, 2, 2, 0, 1, 0, 1, 1, 1, 2, 1, 1, 1, 0, 1, 0, 2, 2, 2],
+	[0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+	[0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+	[0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+	[0, 4, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 4, 0],
+	[0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
+	[0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+	[0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+	[0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+//variables d'execution
+var pos = [10,10];
+var gridpos =[0,0]; //[x,y]
+var dir = []; //[coord x=0 y=1, pixel increment]
+var Incross = false;
+var points = []; //le joueur se déplace entre 2 points
+
+function draw(){
  Initialiser();
- RectanglePlein(x,y,10,10,'red');
+ MapGridToPixel();
+ RectanglePlein(pos[0],pos[1],10,10,'red');
 }
 
-function bouger(deplacement){
+function MapGridToPixel()
+{
+  pos = gridpos.map(function(x) { return x * 10; });
 }
+
+function bouger(deplacement)
+{
+  //cherchons si le joueur est sur une intersection
+	if(deplacement[0] == 0)//move on x
+    {
+      for(var x in crossing[gridpos[1]][gridpos[0]])
+        {
+          if(x + deplacement >=0 || x + deplacement < x.lenght)
+          {
+            gridpos = [x+deplacement,gridpos[1]];
+          }
+        }      
+    }
+  draw();
+}
+
 function Keypressed(k){ 
+  
 switch(k){
-  case "36":
-    bouger("enhaut")
+  
+   case "38": //up
+    
     break;
-  case "37":
     
-  case "38":
+  case "40": // down
+    bouger("down");
+    break;
     
+  case "37": //gauche
+    break;
+    
+    
+  case "39": //droite
+    bouger([0,1]);
+    break;
     
 }
   }
