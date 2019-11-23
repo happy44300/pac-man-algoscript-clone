@@ -28,7 +28,7 @@ var crossing = [
 
 //variables d'execution
 var pos = [10,10];
-var gridpos =[1,1]; //[x,y]
+var gridpos =[1,0]; //[x,y]
 var dir = []; //[coord x=0 y=1, pixel increment]
 var Incross = false;
 var points = []; //le joueur se déplace entre 2 points
@@ -44,7 +44,7 @@ function draw(){
 
 function MapGridToPixel()
 {
-  pos = gridpos.map(function(x) { return x * 10; });
+  pos = gridpos.map(function(x) { return x * 20; });
 }
 
 function bouger(deplacement)
@@ -53,11 +53,13 @@ function bouger(deplacement)
 	if(deplacement[0] == 0)//move on x
     {
       var type = crossing[gridpos[1]][gridpos[0]+deplacement[1]];
-      if(gridpos[0] + deplacement[1] >=0 && gridpos[1] + deplacement[1] < crossing[gridpos[1]].lenght && type != 1)
+      //Ecrire(gridpos[0] + deplacement[1] + "first", gridpos[1] + deplacement[1], crossing[gridpos[1]].length, type);
+      Ecrire(gridpos);
+      if(gridpos[0] + deplacement[1] >=0 && gridpos[0] + deplacement[1] < crossing[gridpos[1]].length && type != 1)
           {
-            Ecrire(deplacement);
-            gridpos = [x+deplacement,gridpos[1]];
-        }      
+            Ecrire("here", crossing[gridpos[1]].length);
+            gridpos = [gridpos[0] + deplacement[1],gridpos[1]];
+          }      
     }
 }
 
