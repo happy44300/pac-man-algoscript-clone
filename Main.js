@@ -60,7 +60,16 @@ function bouger(deplacement)
             Ecrire("here", crossing[gridpos[1]].length);
             gridpos = [gridpos[0] + deplacement[1],gridpos[1]];
           }      
+    }else{
+      var typey = crossing[gridpos[1]+deplacement[1]][gridpos[0]];
+      Ecrire(gridpos);
+      if(gridpos[1] + deplacement[1] >=0 && gridpos[1] + deplacement[1] < crossing.length && typey != 1)
+          {
+            Ecrire("here", crossing[gridpos[1]].length);
+            gridpos = [gridpos[0] ,gridpos[1]+ deplacement[1]];
+          }      
     }
+  
 }
 
 function Keypressed(k)
@@ -70,7 +79,7 @@ function Keypressed(k)
   switch(k){
     
    case 38: //up
-    bouger([1,1]);
+    bouger([1,-1]);
     break;
     
   case 40: // down
