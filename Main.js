@@ -1,3 +1,4 @@
+// Your code here
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -63,6 +64,8 @@ DrawGrid(crossing);
 
 function draw() {
   Initialiser();
+  DrawGrid(crossing);
+  //DrawImageObject(maze,200,0,1024,720);
   move(pacman);
   RectanglePlein(pacman.x, pacman.y, 10, 10, 'red');
 }
@@ -96,8 +99,8 @@ function DrawGridImg(grid) {
   var can = document.createElement('canvas');
   var ctx =  canvas.getContext("2d");
   ctx.fillStyle = "#FF0000";
-  canvas.width = window.screen.width;
-  canvas.height = window.screen.height;
+  canvas.width = 1024;
+  canvas.height = 720;
 
   for (var i = 0; i < grid.length; i++) { 
     for (var k = 0; k < grid[i].length; k++) {
