@@ -30,7 +30,8 @@ var scale = 20;
 
 turtleEnabled=false;
 
-var maze = PreloadImage(DrawGridImg(crossing));
+var canvas = DrawGridImg(crossing);
+var maze = PreloadImage(canvas.toDataURL());
 
 var GridObject = function(){
   var obj = {};
@@ -116,11 +117,30 @@ function DrawGridImg(grid) {
       }
     }
   }
-  return can.toDataURL();
+  return can;
+}
+
+function collision(obj){
+  for(var i=0; i<180; i += 45){
+    if(canvas.getContext('2d').getImageData(rotate(obj.x,obj.y,obj.x+10,obj.y+10), 1, 1).data ){
+    }
+  }
+}
+
+function rotate(cx, cy, x, y, angle) {
+    var radians = (Math.PI / 180) * angle,
+        cos = Math.cos(radians),
+        sin = Math.sin(radians),
+        nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+        ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+    return [nx, ny];
 }
 
 function move(obj) { // dir is an array with [coord to move, direction on the axis]
-
+  
+  if(obj.dir == []){
+    return obj;
+  }
   if (obj.dir[0] == 0) //move on x
   {
     if(obj.dir[1] == 1){
