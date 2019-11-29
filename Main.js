@@ -1,5 +1,3 @@
-//pac man clone
-//variable de configuration
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -27,13 +25,11 @@ var crossing = [
 
 var scale = 20;
 
-
-
 //variables d'execution
-var playerpos = [20, 20];
-var playerpos_last = [0, 0];
 
-var gridpos = [1, 0]; //[x,y]
+turtleEnabled=false;
+
+var maze = PreloadImage(DrawGridImg(crossing));
 
 var GridObject = function(){
   var obj = {};
@@ -94,6 +90,30 @@ function DrawGrid(grid) {
       }
     }
   }
+}
+
+function DrawGridImg(grid) {
+  var can = document.createElement('canvas');
+  var ctx =  canvas.getContext("2d");
+  ctx.fillStyle = "#FF0000";
+  canvas.width = window.screen.width;
+  canvas.height = window.screen.height;
+
+  for (var i = 0; i < grid.length; i++) { 
+    for (var k = 0; k < grid[i].length; k++) {
+      if (grid[i][k] == 0 && grid[i][k + 1] == 0) { // is the next slot a wall?
+        ctx.moveTo(MapGridToPixel(k), MapGridToPixel(i));
+        ctx.lineTo( MapGridToPixel(k + 1), MapGridToPixel(i));
+        ctx.stroke();
+      }
+      if (grid[i][k] == 0 && i + 1 < grid.length && grid[i + 1][k] == 0) { //check that i+1 exist before accesing it
+        ctx.moveTo(MapGridToPixel(k), MapGridToPixel(i));
+        ctx.lineTo( MapGridToPixel(k), MapGridToPixel(i+1));
+        ctx.stroke();
+      }
+    }
+  }
+  return can.toDataURL(type, encoderOptions);
 }
 
 function move(obj) { // dir is an array with [coord to move, direction on the axis]
