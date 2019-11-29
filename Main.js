@@ -30,8 +30,35 @@ var scale = 20;
 
 
 //variables d'execution
-var playerpos = [10, 10];
+var playerpos = [20, 20];
+var playerpos_last = [0, 0];
+
 var gridpos = [1, 0]; //[x,y]
+
+var GridObject = function(){
+  var obj = {};
+  obj.x = 0;
+  obj.y = 0;
+  obj.states = 0;
+  obj.size = 0;
+  obj.dir = [];
+  extend(obj,methods);
+  return obj;
+};
+
+var extend = function(obj, methods){
+  for (var key in methods){
+    obj[key] = methods[key];
+  }
+};
+
+var methods = {
+  Pixelpos: function(){
+    return MapGridToPixel([this.k,this.i]);
+  }
+};
+
+var pacman = GridObject();
 
 Initialiser();
 
@@ -39,8 +66,9 @@ Initialiser();
 DrawGrid(crossing);
 
 function draw() {
-  playerpos = MapGridToPixel(playerpos);
-  RectanglePlein(playerpos[0], playerpos[1], 10, 10, 'red');
+  Initialiser();
+  move(pacman);
+  RectanglePlein(pacman.x, pacman.y, 10, 10, 'red');
 }
 
 
@@ -68,47 +96,51 @@ function DrawGrid(grid) {
   }
 }
 
-function bouger(deplacement) { // deplacement is an array with [coord to move, direction on the axis]
-  //sur x
-  if (deplacement[0] == 0) //move on x
+function move(obj) { // dir is an array with [coord to move, direction on the axis]
+
+  if (obj.dir[0] == 0) //move on x
   {
-    var type = crossing[gridpos[1]][gridpos[0] + deplacement[1]];
-    if (gridpos[0] + deplacement[1] >= 0 && gridpos[0] + deplacement[1] < crossing[gridpos[1]].length && type != 0) {
-      gridpos = [gridpos[0] + deplacement[1], gridpos[1]];
-    }
-  } else { //y movement
-    var typey = crossing[gridpos[1] + deplacement[1]][gridpos[0]];
-    if (gridpos[1] + deplacement[1] >= 0 && gridpos[1] + deplacement[1] < crossing.length && typey != 0) {
-      gridpos = [gridpos[0], gridpos[1] + deplacement[1]];
+    if(obj.dir[1] == 1){
+      obj.x++;
+    }else{
+      obj.x--;
     }
   }
-
+  if(obj.dir[0] == 1){//move on y
+    if(obj.dir[1] == 1){
+      obj.y++;
+    }else{
+      obj.y--;
+    }
+  }
+  return obj;
 }
 
 function Keypressed(k) {
   //Ecrire(k);
   switch (k) {
-
   case 38:
     //up
-    bouger([1, -1]);
+    pacman.dir = [1, -1];
     break;
-
+      
   case 40:
-    // down
-    bouger([1, 1]);
+      // down
+      pacman.dir = [1, 1];
     break;
 
   case 37:
-    //gauche
-    bouger([0, -1]);
+      //gauche
+      pacman.dir = [0, -1];
     break;
-
 
   case 39:
-    //droite
-    bouger([0, 1]);
+      //droite
+      pacman.dir = [0, 1];
     break;
+     
+  case 81: // emergency stop
+      throw "";
   }
 }
 Loop(-1);
