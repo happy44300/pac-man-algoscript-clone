@@ -113,7 +113,7 @@ function DrawGridImg(grid) {
       }
     }
   }
-  return can.toDataURL(type, encoderOptions);
+  return can.toDataURL();
 }
 
 function move(obj) { // dir is an array with [coord to move, direction on the axis]
