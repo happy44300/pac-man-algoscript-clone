@@ -24,19 +24,17 @@ var crossing = [
 ];
 
 var scale = 20;
-var wall_offset = scale * 1; // a brick is between two wall point, the offset is the distance from it's center to border *====center====*
+var speed = 0.5;
 
 //variables d'execution
 
 turtleEnabled=false;
 
-//var canvas = DrawGridImg(crossing);
-//var maze = PreloadImage(canvas.toDataURL());
 
 var GridObject = function(){
   var obj = {};
-  obj.x = 0;
-  obj.y = 0;
+  obj.x = 15;
+  obj.y = 15;
   obj.states = 0;
   obj.width = 10;
   obj.height= 10;
@@ -87,10 +85,10 @@ function DrawGrid(grid) {
   for (var i = 0; i < grid.length; i++) { 
     for (var k = 0; k < grid[i].length; k++) {
       if (grid[i][k] == 0 && grid[i][k + 1] == 0) { // is the next slot a wall?
-        Ligne(MapGridToPixel(k), MapGridToPixel(i), MapGridToPixel(k + 1), MapGridToPixel(i), "red");
+        Ligne(MapGridToPixel(k), MapGridToPixel(i), MapGridToPixel(k + 1), MapGridToPixel(i), "blue");
       }
       if (grid[i][k] == 0 && i + 1 < grid.length && grid[i + 1][k] == 0) { //check that i+1 exist before accesing it
-        Ligne(MapGridToPixel(k), MapGridToPixel(i), MapGridToPixel(k), MapGridToPixel(i + 1), "red");
+        Ligne(MapGridToPixel(k), MapGridToPixel(i), MapGridToPixel(k), MapGridToPixel(i + 1), "blue");
       }
     }
   }
@@ -98,21 +96,26 @@ function DrawGrid(grid) {
 
 
 function collision(obj){
+  var clipOffset = -5;
+  var clipWidth = 20 ;
+  var clipDepth = 20 ;
   
-   var clipWidth = 40;
-        var clipDepth = 40;
-        var clipLength = clipWidth * clipDepth;
-        // alert(clipLength);
-        var clipOffset = 5;
+  // extend hitboxe in the direction we are moving
+  if(obj.dir.length != 0 && obj.dir[0] == 0){
+    clipWidth += obj.dir[1] * 5; // extend on x 
+  }else if(obj.dir[0] == 1){
+    clipDepth = obj.dir[1] * 5;
+  }
   
-  var color = ctx.getImageData(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
-  for (var i = 0; i < obj.width * obj.height ; i += 4) {
-    if (color.data[i] == 255) {
-      Ecrire("red");
+  var clipLength = clipWidth * clipDepth;
+  RectanglePlein(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth, 'yellow');
+  var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
+  for (var i = 0; i < obj.width * obj.height ; i += 4) {  
+    if (color.data[i+2] == 255) {
       return true;
     }
   }
-  return false;
+  
 }
 
 
@@ -121,7 +124,6 @@ function move(obj) { // dir is an array with [coord to move, direction on the ax
   
   if(collision(obj) == true){
     obj.dir = [];
-    return obj;
   }
   
   if(obj.dir == []){
@@ -131,16 +133,16 @@ function move(obj) { // dir is an array with [coord to move, direction on the ax
   if (obj.dir[0] == 0) //move on x
   {
     if(obj.dir[1] == 1){
-      obj.x++;
+      obj.x += speed;
     }else{
-      obj.x--;
+      obj.x -= speed;
     }
   }
   if(obj.dir[0] == 1){//move on y
     if(obj.dir[1] == 1){
-      obj.y++;
+      obj.y += speed;
     }else{
-      obj.y--;
+      obj.y -= speed;
     }
   }
   return obj;
@@ -174,7 +176,7 @@ function Keypressed(k) {
   }
 }
 Loop(-1);
-  
+
 // Fonction utiles
   function rotate(cx, cy, x, y, angle) {
     var radians = (Math.PI / 180) * angle,
@@ -184,35 +186,4 @@ Loop(-1);
         ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
     return [nx, ny];
 }
-function Ini2dArray(x,y){
-  var arr = new Array(y);
-  for (var i = 0; i < y; i++) {
-    x[i] = new Array(x);
-  }
-  return arr;
-}
-  
-//Deprecated function
-  function DrawGridImg(grid) {
-  var can = document.createElement('canvas');
-  var ctx =  canvas.getContext("2d");
-  ctx.fillStyle = "#FF0000";
-  canvas.width = 1024;
-  canvas.height = 720;
-
-  for (var i = 0; i < grid.length; i++) { 
-    for (var k = 0; k < grid[i].length; k++) {
-      if (grid[i][k] == 0 && grid[i][k + 1] == 0) { // is the next slot a wall?
-        ctx.moveTo(MapGridToPixel(k), MapGridToPixel(i));
-        ctx.lineTo( MapGridToPixel(k + 1), MapGridToPixel(i));
-        ctx.stroke();
-      }
-      if (grid[i][k] == 0 && i + 1 < grid.length && grid[i + 1][k] == 0) { //check that i+1 exist before accesing it
-        ctx.moveTo(MapGridToPixel(k), MapGridToPixel(i));
-        ctx.lineTo( MapGridToPixel(k), MapGridToPixel(i+1));
-        ctx.stroke();
-      }
-    }
-  }
-  return can;
-}
+ 
