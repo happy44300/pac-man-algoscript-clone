@@ -96,15 +96,23 @@ function DrawGrid(grid) {
 
 
 function collision(obj){
-  var clipOffset = -5;
-  var clipWidth = 20 ;
-  var clipDepth = 20 ;
+  var clipOffset= -5;
+  var clipWidth = obj.width*2;
+  var clipDepth = obj.height*2;
   
   // extend hitboxe in the direction we are moving
   if(obj.dir.length != 0 && obj.dir[0] == 0){
-    clipWidth += obj.dir[1] * 5; // extend on x 
+    if(obj.dir[1]>0){
+    clipWidth = clipWidth* obj.dir[1] + 2;
+    }else{
+      clipWidth = obj.dir[1] - 2;
+    }
   }else if(obj.dir[0] == 1){
-    clipDepth = obj.dir[1] * 5;
+    if(obj.dir[1]>0){
+    clipDepth = clipDepth* obj.dir[1] + 2;
+    }else{
+      clipDepth = obj.dir[1] - 2;
+    }
   }
   
   var clipLength = clipWidth * clipDepth;
