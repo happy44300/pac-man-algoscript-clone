@@ -1,3 +1,4 @@
+
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -30,6 +31,11 @@ var speed = 0.5;
 
 turtleEnabled=false;
 
+var son;
+
+function ini(){
+  
+}
 
 var GridObject = function(){
   var obj = {};
@@ -56,6 +62,8 @@ var methods = {
 };
 
 var pacman = GridObject();
+var pinky = GridObject();
+
 
 Initialiser();
 
@@ -195,3 +203,5 @@ Loop(-1);
     return [nx, ny];
 }
  
+
+
