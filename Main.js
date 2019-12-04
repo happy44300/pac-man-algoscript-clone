@@ -130,7 +130,7 @@ function collision(obj){
   //RectanglePlein(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth, 'yellow');
   var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
   
-  ctx.putImageData(color,400,200);
+  //ctx.putImageData(color,400,200);
   
   for (var i = 0; i < color.data.length ; i += 4) {  
     if (color.data[i+2] == 255) {
