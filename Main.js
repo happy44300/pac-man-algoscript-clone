@@ -40,6 +40,8 @@ var GridObject = function(){
   var obj = {};
   obj.x = 15;
   obj.y = 15;
+  obj.i = 0;
+  obj.k = 0;
   obj.states = 0;
   obj.width = 0;
   obj.height= 0;
@@ -65,17 +67,67 @@ var pacman = GridObject();
 pacman.width = 15;
 pacman.height = 15;
 pacman.offset = -10;
-var pinky = GridObject();
 
+//ghost use x y positioning in the grid and not in pixels as pacman
+var Blinky= GridObject(); //i =8 k=10
+  Blinky.i = 8;
+  Blinky.k = 10;
 
 Initialiser();
 
+function BlinkyIA(){
+  //chase pacman
+  Blinky.x = MapGridToPixel(Blinky.i);
+  Blinky.y = MapGridToPixel(Blinky.y);
+  
+  Pacmandir = [ MapGridToPixel(Blinky.i) - pacman.x, MapGridToPixel(Blinky.k)-pacman.y]; //vector to pacman
+  var bestdir = 3.14;
+  var angle = 0;
+  
+  //choose best dir toward pacman
+  if(crossing[Blinky.i+1][Blinky.k] == 1){ // right
+    angle = normalizeAngle( Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x)); //calculate angle bewteen pacman vector and dir vector
+    if(angle< bestdir){
+      bestdir = angle;
+      Blinky.x = MapGridToPixel(Blinky.i+1);
+      Blinky.y = MapGridToPixel(Blinky.y);
+    }
+  }
+  if(crossing[Blinky.i-1][Blinky.k] == 1){ // left
+    angle = normalizeAngle( Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x)); //calculate angle bewteen pacman vector and dir vector
+    if(angle< bestdir){
+      bestdir = angle;
+      Blinky.x = MapGridToPixel(Blinky.i-1);
+      Blinky.y = MapGridToPixel(Blinky.y);
+    }
+  }
+  if(crossing[Blinky.i][Blinky.k+1] == 1){ // up
+    angle = normalizeAngle( Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x)); //calculate angle bewteen pacman vector and dir vector
+    if(angle< bestdir){
+      bestdir = angle;
+      Blinky.x = MapGridToPixel(Blinky.i);
+      Blinky.y = MapGridToPixel(Blinky.y+1);
+    }
+  }
+  if(crossing[Blinky.i][Blinky.k-1] == 1){ // down
+    angle = normalizeAngle( Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x)); //calculate angle bewteen pacman vector and dir vector
+    if(angle< bestdir){
+      bestdir = angle;
+      Blinky.x = MapGridToPixel(Blinky.i);
+      Blinky.y = MapGridToPixel(Blinky.y-1);
+    }
+  }
+  
+  
+}
 
 DrawGrid(crossing);
 
 function draw() {
   Initialiser();
   DrawGrid(crossing);
+  BlinkyIA();
+  RectanglePlein(Blinky.x,Blinky.y,10, 15,"red");
   move(pacman);
   RectanglePlein(pacman.x, pacman.y, 10, 10, 'red');
 }
@@ -200,12 +252,9 @@ function Keypressed(k) {
 Loop(-1);
 
 // Fonction utiles
-  function rotate(cx, cy, x, y, angle) {
-    var radians = (Math.PI / 180) * angle,
-        cos = Math.cos(radians),
-        sin = Math.sin(radians),
-        nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
-        ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-    return [nx, ny];
+function normalizeAngle(angle)
+{
+    while (angle <= -Math.pi){ angle += 2*Math.pi;}
+    while (angle> Math.pi){ angle -= 2*Math.pi;}
+    return angle;
 }
- 
