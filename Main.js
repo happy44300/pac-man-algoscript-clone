@@ -1,4 +1,3 @@
-
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -42,8 +41,9 @@ var GridObject = function(){
   obj.x = 15;
   obj.y = 15;
   obj.states = 0;
-  obj.width = 10;
-  obj.height= 10;
+  obj.width = 0;
+  obj.height= 0;
+  obj.offset = 0;
   obj.dir = [];
   extend(obj,methods);
   return obj;
@@ -62,6 +62,9 @@ var methods = {
 };
 
 var pacman = GridObject();
+pacman.width = 15;
+pacman.height = 15;
+pacman.offset = -10;
 var pinky = GridObject();
 
 
@@ -104,29 +107,32 @@ function DrawGrid(grid) {
 
 
 function collision(obj){
-  var clipOffset= -5;
+  var clipOffset= obj.offset;
   var clipWidth = obj.width*2;
   var clipDepth = obj.height*2;
   
-  // extend hitboxe in the direction we are moving
+  // extend hitboxe in the direction we are moving so that we don't get stcuk when stopping
   if(obj.dir.length != 0 && obj.dir[0] == 0){
     if(obj.dir[1]>0){
-    clipWidth = clipWidth* obj.dir[1] + 2;
+    clipWidth = clipWidth* obj.dir[1] + 4;
     }else{
       clipWidth = obj.dir[1] - 2;
     }
   }else if(obj.dir[0] == 1){
     if(obj.dir[1]>0){
-    clipDepth = clipDepth* obj.dir[1] + 2;
+    clipDepth = clipDepth* obj.dir[1] + 4;
     }else{
       clipDepth = obj.dir[1] - 2;
     }
   }
   
   var clipLength = clipWidth * clipDepth;
-  RectanglePlein(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth, 'yellow');
+  //RectanglePlein(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth, 'yellow');
   var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
-  for (var i = 0; i < obj.width * obj.height ; i += 4) {  
+  
+  ctx.putImageData(color,400,200);
+  
+  for (var i = 0; i < color.data.length ; i += 4) {  
     if (color.data[i+2] == 255) {
       return true;
     }
@@ -203,5 +209,3 @@ Loop(-1);
     return [nx, ny];
 }
  
-
-
