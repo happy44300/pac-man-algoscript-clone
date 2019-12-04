@@ -78,7 +78,7 @@ Initialiser();
 function BlinkyIA(){
   //chase pacman
   Blinky.x = MapGridToPixel(Blinky.i);
-  Blinky.y = MapGridToPixel(Blinky.y);
+  Blinky.y = MapGridToPixel(Blinky.k);
   
   Pacmandir = [ MapGridToPixel(Blinky.i) - pacman.x, MapGridToPixel(Blinky.k)-pacman.y]; //vector to pacman
   var bestdir = 3.14;
