@@ -30,10 +30,36 @@ var speed = 0.5;
 
 turtleEnabled=false;
 
-var son;
+var intro= ChargerSon('');//mettre les url
+  var fantomes= ChargerSon('');//mettre les url
+  var waka= ChargerSon('');//mettre les url
+  var win= ChargerSon('');//mettre les url
+  var lose= ChargerSon('');//mettre les url//mettre les url
+  var ost= ChargerSon('');//mettre les url
 
-function ini(){
-  
+
+function Sound(ost)//fonction qui permet de joue les ost au moment voulut
+{switch (ost)
+ { case 1:
+     intro.play();
+     break;
+     
+   case 2:
+     fantomes.play();
+     break;
+     
+   case 3:
+     waka.play();
+     break;
+     
+   case 4:
+     win.play();
+     break;
+     
+   case 5:
+     lose.play();
+     break;
+ }
 }
 
 var GridObject = function(){
