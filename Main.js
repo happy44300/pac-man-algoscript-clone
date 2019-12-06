@@ -30,7 +30,7 @@ var speed = 0.5;
 
 turtleEnabled=false;
 
-  var intro=ImportSon('pac/pacman_beginning.wav');
+  var intro;
   var fantomes;
   var waka;
   var win;
