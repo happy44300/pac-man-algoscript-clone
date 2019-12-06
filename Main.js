@@ -30,9 +30,38 @@ var speed = 0.5;
 
 turtleEnabled=false;
 
-var son;
+  var intro=ImportSon('pac/pacman_beginning.wav');
+  var fantomes;
+  var waka;
+  var win;
+  var lose;
+  var ost;
 
-function ini(){
+
+function Sound(ost,intro,fantomes,waka, win,lose)//fonction qui permet de joue les ost au moment voulut
+{switch (ost)
+ { case 1:
+     intro.play();
+     break;
+     
+   case 2:
+     fantomes.play();
+     break;
+     
+   case 3:
+     waka.play();
+     break;
+     
+   case 4:
+     win.play();
+     break;
+     
+   case 5:
+     lose.play();
+     break;
+ }
+}
+
   
 }
 
