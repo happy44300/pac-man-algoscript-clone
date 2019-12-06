@@ -39,7 +39,7 @@ var win= ChargerSon('');//mettre les url
 var lose= ChargerSon('');//mettre les url//mettre les url
 var ost= ChargerSon('');//mettre les url
 
-var spritesheet = PreloadImage("https://algoscript.info/icons/sprite32.png");
+var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
 
 var GridObject = function(){
   var obj = {};
@@ -86,7 +86,7 @@ function ini(){
   initialiser = true;
 }
 
-
+setInterval(BlinkyIA,1000);
 
 function BlinkyIA(){
   //chase pacman
@@ -101,54 +101,61 @@ function BlinkyIA(){
   var bestang = 3.14;
   var angle = 0;
   var bestdir = 0;
-  
+  var vectorx = 0;
+  var vectory = 0;
   //choose best dir toward pacman
   if(crossing[Blinky.i+1][Blinky.k] == 1){ // up
-    angle = Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
+    angle = Math.atan2(Blinky.y, Blinky.x + MapGridToPixel(1)) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
     if(angle< bestang){
       bestang = angle;
       bestdir = 0;
     }
   }
   if(crossing[Blinky.i-1][Blinky.k] == 1){ // down
-    angle = Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
+    angle = Math.atan2(Blinky.y, Blinky.x + MapGridToPixel(-1)) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
     if(angle< bestang){
       bestang = angle;
       bestdir = 1;
     }
   }
   if(crossing[Blinky.i][Blinky.k+1] == 1){ // right
-    angle = Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
+    angle = Math.atan2(Blinky.y+ MapGridToPixel(1), Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
     if(angle< bestang){
       bestang = angle;
       bestdir = 2;
     }
   }
   if(crossing[Blinky.i][Blinky.k-1] == 1){ // left
-    angle = Math.atan2(pacman.y, Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
+    angle = Math.atan2(Blinky.y + MapGridToPixel(-1), Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
     if(angle< bestang){
       bestang = angle;
       bestdir = 3;
     }
   }
+  //Ecrire(bestdir);
   switch(bestdir){
-    case bestdir == 0:
-      Moveto(crossing[Blinky.i+1][Blinky.k],crossing[Blinky.i][Blinky.k],[1,0],Blinky);
+    case 0:
+      Ecrire("here");
+      Moveto(Blinky.i+1,Blinky.k, [0.5,0], Blinky);
       break;
-    case bestdir == 1:
-      Moveto(crossing[Blinky.i-1][Blinky.k],crossing[Blinky.i][Blinky.k],[-1,0],Blinky);
+    case 1:
+      Moveto(Blinky.i-1, Blinky.k, [-0.5,0], Blinky);
       break;
-    case bestdir == 2:
-      Moveto(crossing[Blinky.i][Blinky.k+1],crossing[Blinky.i][Blinky.k],[0,1],Blinky);
+    case 2:
+      Ecrire("here");
+      Moveto(Blinky.i,Blinky.k+1,[0,0.5],Blinky);
       break;
-    case bestdir == 3:
-      Moveto(crossing[Blinky.i][Blinky.k-1],crossing[Blinky.i][Blinky.k],[0,-1],Blinky);
+    case 3:
+      Ecrire("here");
+      Moveto(Blinky.i,Blinky.k-1,[0,-0.5],Blinky);
       break;
   }
 }
 
 function Moveto(x,y,dir,obj){
+  
   obj.moving = true;//prevent multiple movement
+  
   while(obj.x !=x && obj.y != y){
     obj.x += dir[0];
     obj.y += dir[1];
@@ -164,12 +171,11 @@ function draw() {
     return;
   }
   DrawGrid(crossing);
-  BlinkyIA();
+  
   RectanglePlein(Blinky.x,Blinky.y,10, 15,"red");
   move(pacman);
   RectanglePlein(pacman.x, pacman.y, 10, 10, 'red');
 }
-
 
 function MapGridToPixel(pos) {
   if (Array.isArray(pos)) {
