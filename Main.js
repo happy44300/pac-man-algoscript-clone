@@ -30,37 +30,16 @@ var speed = 0.5;
 
 turtleEnabled=false;
 
+var initialiser = false;
+
 var intro= ChargerSon('');//mettre les url
-  var fantomes= ChargerSon('');//mettre les url
-  var waka= ChargerSon('');//mettre les url
-  var win= ChargerSon('');//mettre les url
-  var lose= ChargerSon('');//mettre les url//mettre les url
-  var ost= ChargerSon('');//mettre les url
+var fantomes= ChargerSon('');//mettre les url
+var waka= ChargerSon('');//mettre les url
+var win= ChargerSon('');//mettre les url
+var lose= ChargerSon('');//mettre les url//mettre les url
+var ost= ChargerSon('');//mettre les url
 
-
-function Sound(ost)//fonction qui permet de joue les ost au moment voulut
-{switch (ost)
- { case 1:
-     intro.play();
-     break;
-     
-   case 2:
-     fantomes.play();
-     break;
-     
-   case 3:
-     waka.play();
-     break;
-     
-   case 4:
-     win.play();
-     break;
-     
-   case 5:
-     lose.play();
-     break;
- }
-}
+var placeholder = PreloadImage("https://algoscript.info/icons/indent_32.png");
 
 var GridObject = function(){
   var obj = {};
@@ -91,16 +70,22 @@ var methods = {
 };
 
 var pacman = GridObject();
-pacman.width = 15;
-pacman.height = 15;
-pacman.offset = -10;
-
 //ghost use x y positioning in the grid and not in pixels as pacman
 var Blinky= GridObject(); //i =8 k=10
-  Blinky.i = 8;
-  Blinky.k = 10;
 
-Initialiser();
+WaitPreload(ini);
+
+function ini(){
+  Initialiser();
+  pacman.width = 15;
+  pacman.height = 15;
+  pacman.offset = -10;
+  Blinky.i = 9;
+  Blinky.k = 10;
+  initialiser = true;
+}
+
+
 
 function BlinkyIA(){
   //chase pacman
@@ -157,6 +142,9 @@ DrawGrid(crossing);
 
 function draw() {
   Initialiser();
+    if(iniatialiser == false){
+    return;
+  }
   DrawGrid(crossing);
   BlinkyIA();
   RectanglePlein(Blinky.x,Blinky.y,10, 15,"red");
@@ -255,7 +243,9 @@ function move(obj) { // dir is an array with [coord to move, direction on the ax
 }
 
 function Keypressed(k) {
-  //Ecrire(k);
+  if(iniatialiser == false){
+    return;
+  }
   switch (k) {
   case 38:
     //up
@@ -280,6 +270,30 @@ function Keypressed(k) {
   case 81: // emergency stop
       throw "";
   }
+}
+
+function Playsound(ost)//fonction qui permet de joue les ost au moment voulut
+{switch (ost)
+ { case 1:
+     intro.play();
+     break;
+     
+   case 2:
+     fantomes.play();
+     break;
+     
+   case 3:
+     waka.play();
+     break;
+     
+   case 4:
+     win.play();
+     break;
+     
+   case 5:
+     lose.play();
+     break;
+ }
 }
 Loop(-1);
 
