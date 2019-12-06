@@ -1,3 +1,4 @@
+
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -136,30 +137,29 @@ function BlinkyIA(){
   switch(bestdir){
     case 0:
       Ecrire("here");
-      Moveto(Blinky.i+1,Blinky.k, [0.5,0], Blinky);
+      Moveto(Blinky.i,Blinky.k+1, Blinky);
       break;
     case 1:
-      Moveto(Blinky.i-1, Blinky.k, [-0.5,0], Blinky);
+      Moveto(Blinky.i, Blinky.k-1, Blinky);
       break;
     case 2:
       Ecrire("here");
-      Moveto(Blinky.i,Blinky.k+1,[0,0.5],Blinky);
+      Moveto(Blinky.i+1,Blinky.k,Blinky);
       break;
     case 3:
       Ecrire("here");
-      Moveto(Blinky.i,Blinky.k-1,[0,-0.5],Blinky);
+      Moveto(Blinky.i-1,Blinky.k,Blinky);
       break;
   }
 }
 
-function Moveto(x,y,dir,obj){
+function Moveto(i,k,obj){
   
   obj.moving = true;//prevent multiple movement
-  
-  while(obj.x !=x && obj.y != y){
-    obj.x += dir[0];
-    obj.y += dir[1];
-  }
+  obj.i = i;
+  obj.k=k;
+  obj.x = -i*20;
+  obj.y = -i*20;
   obj.moving = false;
 }
 
