@@ -30,15 +30,15 @@ var speed = 0.5;
 
 turtleEnabled=false;
 
-  var intro;
-  var fantomes;
-  var waka;
-  var win;
-  var lose;
-  var ost;
+  var intro= ChargerSon('');//mettre les url
+  var fantomes= ChargerSon('');//mettre les url
+  var waka= ChargerSon('');//mettre les url
+  var win= ChargerSon('');//mettre les url
+  var lose= ChargerSon('');//mettre les url//mettre les url
+  var ost= ChargerSon('');//mettre les url
 
 
-function Sound(ost,intro,fantomes,waka, win,lose)//fonction qui permet de joue les ost au moment voulut
+function Sound(ost)//fonction qui permet de joue les ost au moment voulut
 {switch (ost)
  { case 1:
      intro.play();
