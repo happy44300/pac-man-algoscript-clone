@@ -32,14 +32,15 @@ var speed = 0.5;
 //variables d'execution
 
 turtleEnabled=false;
-var GameMap = crossing.slice();
+var GameMap;
 
 var initialiser = false;
+var gomes = 182; //total number of gome 
 
 var intro= ChargerSon('');//mettre les url
 var fantomes= ChargerSon('');//mettre les url
 var waka= ChargerSon('');//mettre les url
-var win= ChargerSon('');//mettre les url
+var winSound= ChargerSon('');//mettre les url
 var lose= ChargerSon('');//mettre les url//mettre les url
 var ost= ChargerSon('');//mettre les url
 
@@ -89,6 +90,8 @@ function ini(){
   Blinky.k = 10;
   Blinky.x = MapGridToPixel(Blinky.i);
   Blinky.y = MapGridToPixel(Blinky.k);
+  GameMap = crossing.slice();
+  gomes = 182;
   initialiser = true;
 }
 
@@ -155,14 +158,14 @@ function Moveto(i,k,obj){
 }
 
 DrawGrid(crossing);
-
-//draw
+//don't draw before everything is loaded
 function draw() {
   Initialiser();
     if(initialiser == false){
     return;
   }
-  RectanglePlein(0,0,10000, 10000,"black");
+  win(); //make win check and win
+  RectanglePlein(0,0,10000, 10000,"black"); //background
   DrawGrid(GameMap);
   
   RectanglePlein(Blinky.x,Blinky.y,10, 15,"red");
@@ -183,8 +186,15 @@ function MapPixelToGrid(pos) {
     return Math.abs(Math.round((pos / scale)));
   }
 
-function DrawGrid(grid) {
+function win(){
+  if(gomes == 0){
+  Ecrire("win");
+  }
+}
 
+
+function DrawGrid(grid) {
+  
   for (var i = 0; i < grid.length; i++) { 
     for (var k = 0; k < grid[i].length; k++) {
       if (grid[i][k] == 0 && grid[i][k + 1] == 0) { // is the next slot a wall?
@@ -193,9 +203,10 @@ function DrawGrid(grid) {
       if (grid[i][k] == 0 && i + 1 < grid.length && grid[i + 1][k] == 0) { //check that i+1 exist before accesing it
         Ligne(MapGridToPixel(k), MapGridToPixel(i), MapGridToPixel(k), MapGridToPixel(i + 1), "blue");
       }
-      if(grid[i][k] == 1)
+      if(grid[i][k] == 1 || grid[i][k] == 4)
       {
          RectanglePlein(MapGridToPixel(k), MapGridToPixel(i),5,5,"white");
+        
       }
     }
   }
@@ -207,7 +218,7 @@ function collision(obj){
   var clipWidth = obj.width*2;
   var clipDepth = obj.height*2;
   
-  // extend hitboxe in the direction we are moving so that we don't get stcuk when stopping
+  // extend hitboxe in the direction we are moving so that we don't get stuck when stopping
   if(obj.dir.length != 0 && obj.dir[0] == 0){
     if(obj.dir[1]>0){
     clipWidth = clipWidth* obj.dir[1] + 4;
@@ -227,25 +238,21 @@ function collision(obj){
   var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
   
   var gomehitbox = ctx.getImageData(obj.x -obj.width/2 , obj.y -obj.height/2, obj.width*2, obj.height*2);
-  //ctx.putImageData(gomehitbox,400,200);
-  //RectanglePlein(obj.x , obj.y , obj.width, obj.height, 'green');
   
-  for (var i = 0; i < color.data.length ; i += 4) {  
+  for (var i = 0; i < color.data.length ; i += 8) {  
     if (color.data[i+2] >100 && color.data[i] != 255) {
       return true;
     }
   }
-  for (i = 0; i < gomehitbox.data.length ; i += 4) {
+  for (i = 0; i < gomehitbox.data.length ; i += 8) {
     if(gomehitbox.data[i] == 255 &&gomehitbox.data[i+1] == 255&& gomehitbox.data[i+2] ==255){
       if(GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0){
+        gomes --;
       GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
       }
     }
   }
 }
-
-
-
 function move(obj) { // dir is an array with [coord to move, direction on the axis]
   
   if(collision(obj) == true){
