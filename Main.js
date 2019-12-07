@@ -1,3 +1,5 @@
+// Your code here
+// Your code here
 
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -30,6 +32,7 @@ var speed = 0.5;
 //variables d'execution
 
 turtleEnabled=false;
+var GameMap = crossing.slice();
 
 var initialiser = false;
 
@@ -84,13 +87,16 @@ function ini(){
   pacman.offset = -10;
   Blinky.i = 9;
   Blinky.k = 10;
+  Blinky.x = MapGridToPixel(Blinky.i);
+  Blinky.y = MapGridToPixel(Blinky.k);
   initialiser = true;
 }
 
-setInterval(BlinkyIA,1000);
+function BasicIA(){}
 
 function BlinkyIA(){
   //chase pacman
+  
   Blinky.x = MapGridToPixel(Blinky.i);
   Blinky.y = MapGridToPixel(Blinky.k);
   
@@ -98,49 +104,32 @@ function BlinkyIA(){
     return;
   }
   
-  Pacmandir = [ MapGridToPixel(Blinky.i) - pacman.x, MapGridToPixel(Blinky.k)-pacman.y]; //vector to pacman
+  pacmandir = [ MapGridToPixel(Blinky.i) - pacman.x, MapGridToPixel(Blinky.k)-pacman.y]; //vector to pacman
+  Ecrire(pacmandir);
   var bestang = 3.14;
   var angle = 0;
   var bestdir = 0;
   var vectorx = 0;
   var vectory = 0;
-  //choose best dir toward pacman
-  if(crossing[Blinky.i+1][Blinky.k] == 1){ // up
-    angle = Math.atan2(Blinky.y, Blinky.x + MapGridToPixel(1)) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
-    if(angle< bestang){
-      bestang = angle;
-      bestdir = 0;
-    }
+  //choose best dir toward pacman by projecting x and y on the axis
+  //0:up, 1:down , 2:right, 3:left
+  if(Math.abs(pacmandir[0]) > Math.abs(pacmandir[1])){
+    //move on x
+    if(pacmandir[0] < 0){bestdir = 0;}else{bestdir = 1;}
+  }else{
+    //move on y
+    if(pacmandir[1] < 0){bestdir = 2;}else{bestdir = 3;}
   }
-  if(crossing[Blinky.i-1][Blinky.k] == 1){ // down
-    angle = Math.atan2(Blinky.y, Blinky.x + MapGridToPixel(-1)) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
-    if(angle< bestang){
-      bestang = angle;
-      bestdir = 1;
-    }
-  }
-  if(crossing[Blinky.i][Blinky.k+1] == 1){ // right
-    angle = Math.atan2(Blinky.y+ MapGridToPixel(1), Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
-    if(angle< bestang){
-      bestang = angle;
-      bestdir = 2;
-    }
-  }
-  if(crossing[Blinky.i][Blinky.k-1] == 1){ // left
-    angle = Math.atan2(Blinky.y + MapGridToPixel(-1), Blinky.x) - Math.atan2(pacman.y,pacman.x); //calculate angle bewteen pacman vector and dir vector
-    if(angle< bestang){
-      bestang = angle;
-      bestdir = 3;
-    }
-  }
+    
   //Ecrire(bestdir);
+  if(Blinky.moving == true){return;}
   switch(bestdir){
     case 0:
       Ecrire("here");
-      Moveto(Blinky.i,Blinky.k+1, Blinky);
+      Moveto(Blinky.i,Blinky.k-1, Blinky);
       break;
     case 1:
-      Moveto(Blinky.i, Blinky.k-1, Blinky);
+      Moveto(Blinky.i, Blinky.k+1, Blinky);
       break;
     case 2:
       Ecrire("here");
@@ -154,27 +143,31 @@ function BlinkyIA(){
 }
 
 function Moveto(i,k,obj){
-  
+  if(obj.moving == true){return;}
   obj.moving = true;//prevent multiple movement
+  if(obj.i - i !=0 && obj.k-k !=0){Ecrire("doublemove");}
   obj.i = i;
   obj.k=k;
-  obj.x = -i*20;
-  obj.y = -i*20;
+  obj.x = i*20;
+  obj.y = i*20;
   obj.moving = false;
+  return;
 }
 
 DrawGrid(crossing);
 
+//draw
 function draw() {
   Initialiser();
     if(initialiser == false){
     return;
   }
-  DrawGrid(crossing);
+  RectanglePlein(0,0,10000, 10000,"black");
+  DrawGrid(GameMap);
   
   RectanglePlein(Blinky.x,Blinky.y,10, 15,"red");
   move(pacman);
-  RectanglePlein(pacman.x, pacman.y, 10, 10, 'red');
+  RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
 }
 
 function MapGridToPixel(pos) {
@@ -186,6 +179,9 @@ function MapGridToPixel(pos) {
   }
   return pos * scale;
 }
+function MapPixelToGrid(pos) {
+    return Math.abs(Math.round((pos / scale)));
+  }
 
 function DrawGrid(grid) {
 
@@ -196,6 +192,10 @@ function DrawGrid(grid) {
       }
       if (grid[i][k] == 0 && i + 1 < grid.length && grid[i + 1][k] == 0) { //check that i+1 exist before accesing it
         Ligne(MapGridToPixel(k), MapGridToPixel(i), MapGridToPixel(k), MapGridToPixel(i + 1), "blue");
+      }
+      if(grid[i][k] == 1)
+      {
+         RectanglePlein(MapGridToPixel(k), MapGridToPixel(i),5,5,"white");
       }
     }
   }
@@ -223,17 +223,25 @@ function collision(obj){
   }
   
   var clipLength = clipWidth * clipDepth;
-  //RectanglePlein(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth, 'yellow');
+  
   var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
   
-  //ctx.putImageData(color,400,200);
+  var gomehitbox = ctx.getImageData(obj.x -obj.width/2 , obj.y -obj.height/2, obj.width*2, obj.height*2);
+  //ctx.putImageData(gomehitbox,400,200);
+  //RectanglePlein(obj.x , obj.y , obj.width, obj.height, 'green');
   
   for (var i = 0; i < color.data.length ; i += 4) {  
-    if (color.data[i+2] == 255) {
+    if (color.data[i+2] >100 && color.data[i] != 255) {
       return true;
     }
   }
-  
+  for (i = 0; i < gomehitbox.data.length ; i += 4) {
+    if(gomehitbox.data[i] == 255 &&gomehitbox.data[i+1] == 255&& gomehitbox.data[i+2] ==255){
+      if(GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0){
+      GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
+      }
+    }
+  }
 }
 
 
