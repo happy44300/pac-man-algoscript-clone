@@ -1,6 +1,3 @@
-// Your code here
-// Your code here
-
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -39,7 +36,7 @@ var gomes = 182; //total number of gome
 
 var intro= ChargerSon('');//mettre les url
 var fantomes= ChargerSon('');//mettre les url
-var waka= ChargerSon('');//mettre les url
+var waka= ChargerSon('https://happy44300.github.io/pac-man-waka-waka.mp3');//mettre les url
 var winSound= ChargerSon('');//mettre les url
 var lose= ChargerSon('');//mettre les url//mettre les url
 var ost= ChargerSon('');//mettre les url
@@ -157,6 +154,7 @@ function Moveto(i,k,obj){
   return;
 }
 
+
 DrawGrid(crossing);
 //don't draw before everything is loaded
 function draw() {
@@ -167,11 +165,12 @@ function draw() {
   win(); //make win check and win
   RectanglePlein(0,0,10000, 10000,"black"); //background
   DrawGrid(GameMap);
-  
+  //Ecrire(gomes);
   RectanglePlein(Blinky.x,Blinky.y,10, 15,"red");
   move(pacman);
   RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
 }
+
 
 function MapGridToPixel(pos) {
   if (Array.isArray(pos)) {
@@ -188,7 +187,7 @@ function MapPixelToGrid(pos) {
 
 function win(){
   if(gomes == 0){
-  Ecrire("win");
+    Ecrire("win");
   }
 }
 
@@ -235,21 +234,20 @@ function collision(obj){
   
   var clipLength = clipWidth * clipDepth;
   
-  var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
-  
+  var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);  
   var gomehitbox = ctx.getImageData(obj.x -obj.width/2 , obj.y -obj.height/2, obj.width*2, obj.height*2);
-  
-  for (var i = 0; i < color.data.length ; i += 8) {  
-    if (color.data[i+2] >100 && color.data[i] != 255) {
-      return true;
+  for (i = 0; i < gomehitbox.data.length ; i += 8) {
+    if(gomehitbox.data[i] == 255 &&gomehitbox.data[i+1] == 255 && gomehitbox.data[i+2] ==255){
+      if(GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0){       
+        GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
+        Playsound(3);
+        break;
+      }
     }
   }
-  for (i = 0; i < gomehitbox.data.length ; i += 8) {
-    if(gomehitbox.data[i] == 255 &&gomehitbox.data[i+1] == 255&& gomehitbox.data[i+2] ==255){
-      if(GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0){
-        gomes --;
-      GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
-      }
+   for (var i = 0; i < color.data.length ; i += 8) {  
+    if (color.data[i+2] >100 && color.data[i] != 255) {
+      return true;
     }
   }
 }
