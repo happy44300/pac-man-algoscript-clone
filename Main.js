@@ -1,7 +1,3 @@
-// Your code here
-// Your code here
-// Your code here
-// Your code here
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -164,7 +160,7 @@ function draw() {
     move(pacman);
     //RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
     DrawPac(pacman);
-    RectanglePlein(Blinky.x, Blinky.y), 10, 15, "red");
+    RectanglePlein(Blinky.x, Blinky.y, 10, 15, "red");
     Shortcut(pacman);
   }
 }
