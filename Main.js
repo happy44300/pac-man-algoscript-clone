@@ -1,4 +1,7 @@
 // Your code here
+// Your code here
+// Your code here
+// Your code here
 var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -31,8 +34,8 @@ var speed = 0.5;
 turtleEnabled = false;
 var GameMap;
 
+var lastDir = []; //latest pacman dir, used for rendering
 var initialiser = false;
-
 var intro = ChargerSon('https://happy44300.github.io/intro.wav');
 var fantomes = ChargerSon(''); //mettre les url
 var waka = ChargerSon('https://happy44300.github.io/pac-man-waka-waka.mp3');
@@ -40,6 +43,8 @@ var winSound = ChargerSon(''); //mettre les url
 var lose = ChargerSon(''); //mettre les url//mettre les url
 var ost = ChargerSon(''); //mettre les url
 var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
+
+
 
 var GridObject = function() {
   var obj = {};
@@ -89,12 +94,66 @@ function ini() {
   Blinky.y = MapGridToPixel(Blinky.k);
   GameMap = crossing.slice();
   Playsound(1);
-  setTimeout(function() { iniEnd(); }, 4000);
-}
-function iniEnd(){
+  
+  //setTimeout(function() { iniEnd(); }, 4000);
   initialiser = true;
 }
 
+function iniEnd() {
+  initialiser = true;
+}
+
+function Shortcut(obj){
+  if(obj.x > MapGridToPixel(18) && obj.y > MapGridToPixel(8)){
+    obj.x = MapGridToPixel(1) + obj.width;//offset
+    obj.y = MapGridToPixel(9) + obj.height;
+  }else if(obj.x < MapGridToPixel(0) && obj.y > MapGridToPixel(8)){
+    obj.x = MapGridToPixel(17) + obj.width;
+    obj.y = MapGridToPixel(9)+ obj.height;
+  }
+}
+
+function DrawPac(obj) {
+
+  //each of our sprite is 32*32
+  //ctx.drawImage(spritesheet, 0, 0, x*32, y*32, obj.x - 1/2* obj.width ,obj.y -1/2* obj.height, 32, 32);
+  //DrawImageObject(spritesheet,32,32,32,32);
+  //since we can't load image due to CORS problems in algoscript, we draw pacman by hand
+  var dir = 0;
+  var useddir = [];
+
+
+  //since when pacman is stopped, obj.dir is [], we need to assign a value locally
+
+  if (obj.dir.length == 0) {
+    useddir = lastDir.slice();
+  } else {
+    lastDir = obj.dir.slice();
+    useddir = lastDir.slice();
+  }
+  if (useddir[0] == 0) {
+    if (useddir[1] == 1) {
+      dir = 1;
+    } else {
+      dir = -1;
+    }
+
+  }
+  if (useddir[0] == 1) {
+    if (useddir[1] == 1) {
+      dir = 1;
+    } else {
+      dir = -1;
+    }
+  }
+    ctx.beginPath();
+    ctx.arc(obj.x + pacman.width / 2, obj.y + pacman.height / 2, 10, dir * 0.25 * Math.PI, dir * 1.25 * Math.PI, false);
+    ctx.fillStyle = "rgb(255, 255, 0)";
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(obj.x + pacman.width / 2, obj.y + pacman.height / 2, 10, dir * 0.75 * Math.PI, dir * 1.75 * Math.PI, false);
+    ctx.fill();
+}
 
 function draw() {
   Initialiser();
@@ -102,15 +161,12 @@ function draw() {
   DrawGrid(GameMap);
   //don't draw or move before everything is loaded
   if (initialiser == true) {
-
     move(pacman);
-    RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
-    RectanglePlein(Blinky.x, Blinky.y, 10, 15, "red");
+    //RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
+    DrawPac(pacman);
+    RectanglePlein(Blinky.x, Blinky.y), 10, 15, "red");
+    Shortcut(pacman);
   }
-
-
-
-
 }
 
 function BasicIA() {}
@@ -189,8 +245,6 @@ function Moveto(i, k, obj) {
 }
 
 
-
-
 function MapGridToPixel(pos) {
   if (Array.isArray(pos)) {
     pos = gridpos.map(function(x) {
@@ -213,8 +267,11 @@ function win() {
 
 function DrawGrid(grid) {
 
-  var gome = false;
+  if (grid == undefined) {
+    return;
+  }
 
+  var gome = false;
   for (var i = 0; i < grid.length; i++) {
     for (var k = 0; k < grid[i].length; k++) {
       if (grid[i][k] == 0 && grid[i][k + 1] == 0) { // is the next slot a wall?
@@ -226,7 +283,7 @@ function DrawGrid(grid) {
       if (grid[i][k] == 1 || grid[i][k] == 4) //draw gome
       {
         RectanglePlein(MapGridToPixel(k), MapGridToPixel(i), 5, 5, "white");
-        gome = true;
+        gome = true; //win check here because we loop here
       }
     }
   }
@@ -234,6 +291,7 @@ function DrawGrid(grid) {
     win();
   }
 }
+
 
 
 function collision(obj) {
@@ -266,6 +324,7 @@ function collision(obj) {
     if (gomehitbox.data[i] == 255 && gomehitbox.data[i + 1] == 255 && gomehitbox.data[i + 2] == 255) {
       if (GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0) {
         GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
+
         break;
       }
     }
@@ -282,7 +341,7 @@ function move(obj) { // dir is an array with [coord to move, direction on the ax
     obj.dir = [];
   }
 
-  if (obj.dir == []) {
+  if (obj.dir.length == 0) {
     return obj;
   }
 
@@ -360,12 +419,5 @@ function Playsound(ost) //fonction qui permet de joue les ost au moment voulut
   }
 }
 
-function wait(ms) {
-  var start = Date.now(),
-   now = start;
-  while (now - start < ms) {
-    now = Date.now();
-  }
-}
 
 Loop(-1);
