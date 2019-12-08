@@ -32,7 +32,6 @@ turtleEnabled=false;
 var GameMap;
 
 var initialiser = false;
-var gomes = 182; //total number of gome 
 
 var intro= ChargerSon('');//mettre les url
 var fantomes= ChargerSon('');//mettre les url
@@ -162,7 +161,6 @@ function draw() {
     if(initialiser == false){
     return;
   }
-  win(); //make win check and win
   RectanglePlein(0,0,10000, 10000,"black"); //background
   DrawGrid(GameMap);
   //Ecrire(gomes);
@@ -186,13 +184,13 @@ function MapPixelToGrid(pos) {
   }
 
 function win(){
-  if(gomes == 0){
     Ecrire("win");
-  }
 }
 
 
 function DrawGrid(grid) {
+  
+  var gome = false;
   
   for (var i = 0; i < grid.length; i++) { 
     for (var k = 0; k < grid[i].length; k++) {
@@ -202,12 +200,15 @@ function DrawGrid(grid) {
       if (grid[i][k] == 0 && i + 1 < grid.length && grid[i + 1][k] == 0) { //check that i+1 exist before accesing it
         Ligne(MapGridToPixel(k), MapGridToPixel(i), MapGridToPixel(k), MapGridToPixel(i + 1), "blue");
       }
-      if(grid[i][k] == 1 || grid[i][k] == 4)
+      if(grid[i][k] == 1 || grid[i][k] == 4)//draw gome
       {
-         RectanglePlein(MapGridToPixel(k), MapGridToPixel(i),5,5,"white");
-        
+        RectanglePlein(MapGridToPixel(k), MapGridToPixel(i),5,5,"white");
+        gome = true;
       }
     }
+  }
+  if(gome == false){
+    win();
   }
 }
 
@@ -234,13 +235,14 @@ function collision(obj){
   
   var clipLength = clipWidth * clipDepth;
   
+  //extract image data from the canvas around the player
   var color = ctx.getImageData(obj.x +clipOffset, obj.y + clipOffset, clipWidth, clipDepth);  
   var gomehitbox = ctx.getImageData(obj.x -obj.width/2 , obj.y -obj.height/2, obj.width*2, obj.height*2);
+  
   for (i = 0; i < gomehitbox.data.length ; i += 8) {
     if(gomehitbox.data[i] == 255 &&gomehitbox.data[i+1] == 255 && gomehitbox.data[i+2] ==255){
       if(GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0){       
         GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
-        Playsound(3);
         break;
       }
     }
@@ -333,11 +335,3 @@ function Playsound(ost)//fonction qui permet de joue les ost au moment voulut
  }
 }
 Loop(-1);
-
-// Fonction utiles
-function normalizeAngle(angle)
-{
-    while (angle <= -Math.pi){ angle += 2*Math.pi;}
-    while (angle> Math.pi){ angle -= 2*Math.pi;}
-    return angle;
-}
