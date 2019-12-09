@@ -5,7 +5,8 @@
  | .__/ \__,_|\___|_| |_| |_|\__,_|_| |_|
  |_|   
  
- Written by Molli Bilal and Steve []
+ Authors:Bilal Molli and Steve []
+ Licensed under GNU General Public License v3.0
 */
 var crossing = [
 
