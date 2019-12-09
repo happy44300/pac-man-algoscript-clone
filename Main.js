@@ -112,31 +112,31 @@ function ini() {
   Blinky.k = 10;
   Blinky.x = MapGridToPixel(Blinky.i);
   Blinky.y = MapGridToPixel(Blinky.k);
-  Blinky.width = 10
-  Blinky.height =15
+  Blinky.width = 10;
+  Blinky.height =15;
   
   Pinky.i = 9;
   Pinky.k = 10;
   Pinky.x = MapGridToPixel(Pinky.i);
   Pinky.y = MapGridToPixel(Pinky.k);
-  Pinky.width = 10
-  Pinky.height =15
+  Pinky.width = 10;
+  Pinky.height =15;
   
 
   Inky.i = 8;
   Inky.k = 10;
   Inky.x = MapGridToPixel(Inky.i);
   Inky.y = MapGridToPixel(Inky.k);
-  Inky.width = 10
-  Inky.height =15
+  Inky.width = 10;
+  Inky.height =15;
   
 
   Clyde.i = 7;
   Clyde.k = 10;
   Clyde.x = MapGridToPixel(Clyde.i);
   Clyde.y = MapGridToPixel(Clyde.k);
-  Clyde.width = 10
-  Clyde.height =15
+  Clyde.width = 10;
+  Clyde.height =15;
   
 
   GameMap = crossing.slice();
@@ -215,10 +215,10 @@ function draw() {
     move(pacman);
     //RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
     DrawPac(pacman);
-    RectanglePlein(Blinky.x, Blinky.y, 10, 15, "red");
-    RectanglePlein(Pinky.x, Pinky.y, 10, 15, "pink");
-    RectanglePlein(Inky.x, Inky.y, 10, 15, "blue");
-    RectanglePlein(Clyde.x, Clyde.y, 10, 15, "orange");
+    RectanglePlein(Blinky.x, Blinky.y, Blinky.width, Pinky.height, "red");
+    RectanglePlein(Pinky.x, Pinky.y, Pinky.width, Pinky.height, "pink");
+    RectanglePlein(Inky.x, Inky.y, Inky.width, Pinky.height, "blue");
+    RectanglePlein(Clyde.x, Clyde.y, Clyde.width, Pinky.height, "orange");
     Shortcut(pacman);
   }
 }
