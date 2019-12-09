@@ -131,8 +131,8 @@ function ini() {
   Inky.height =15;
   
 
-  Clyde.i = 7;
-  Clyde.k = 10;
+  Clyde.i = 9;
+  Clyde.k = 9;
   Clyde.x = MapGridToPixel(Clyde.i);
   Clyde.y = MapGridToPixel(Clyde.k);
   Clyde.width = 10;
