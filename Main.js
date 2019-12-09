@@ -51,7 +51,7 @@ var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
 
 
 
-
+//Create prototype to instantiate object
 var GridObject = function() {
 
   var obj = {};
@@ -96,6 +96,7 @@ var Inky = GridObject(); // i=8 k=10
 var Clyde = GridObject(); // i=9 k=9
 WaitPreload(ini);
 
+//set default value
 function ini(mode) {
   Initialiser();
   initialiser = false;
@@ -147,10 +148,11 @@ function ini(mode) {
   }
 }
 
+//unfreeze game
 function iniEnd() {
   initialiser = true;
 }
-
+//shortcut check for pacman
 function Shortcut(obj) {
 
   if (obj.x > MapGridToPixel(18) && obj.y > MapGridToPixel(8)) {
@@ -163,7 +165,7 @@ function Shortcut(obj) {
 }
 
 
-
+//draw pacman from object
 function DrawPac(obj) {
   //each of our sprite is 32*32
   //ctx.drawImage(spritesheet, 0, 0, x*32, y*32, obj.x - 1/2* obj.width ,obj.y -1/2* obj.height, 32, 32);
@@ -202,9 +204,8 @@ function DrawPac(obj) {
 }
 
 
-
+//main loop
 function draw() {
-
   Initialiser();
 
   RectanglePlein(0, 0, 10000, 10000, "black"); //background
@@ -234,7 +235,7 @@ function BasicIA(obj) {
 
 }
 
-
+//utility function to convert the maze array to pixel pos
 function MapGridToPixel(pos) {
   if (Array.isArray(pos)) {
     pos = gridpos.map(function(x) {
@@ -245,6 +246,7 @@ function MapGridToPixel(pos) {
   return pos * scale;
 }
 
+/*
 function MapPixelToGrid(pos) {
   return Math.abs(Math.round((pos / scale)));
 }
@@ -255,7 +257,9 @@ function win() {
     ini();
   }
 }
+*/
 
+//kill pac man
 function death() {
   //playsound death
   Playsound(5);
@@ -268,10 +272,12 @@ function death() {
   }
 }
 
+//draw life counter
 function DrawLife() {
   Texte(MapGridToPixel(crossing[0].length), MapGridToPixel(crossing.length), "Life " + life.toString(), "white");
 }
 
+//draw maze and win check
 function DrawGrid(grid) {
   if (grid == undefined) {
     return;
@@ -297,6 +303,7 @@ function DrawGrid(grid) {
   }
 }
 
+//handle object collision
 function collision(obj) {
   var clipOffset = obj.offset;
   var clipWidth = obj.width * 2;
@@ -335,11 +342,10 @@ function collision(obj) {
     if (color.data[i + 2] > 100 && color.data[i] != 255) {
       return true;
     }
-
   }
-
 }
 
+//move object
 function move(obj) { // dir is an array with [coord to move, direction on the axis]
   if (collision(obj) == true) {
     obj.dir = [];
@@ -365,6 +371,7 @@ function move(obj) { // dir is an array with [coord to move, direction on the ax
   return obj;
 }
 
+//get keyboard input
 function Keypressed(k) {
   if (initialiser == false) {
     return;
@@ -401,7 +408,8 @@ function Keypressed(k) {
 
 }
 
-function Playsound(ost) //fonction qui permet de joue les ost au moment voulut
+//play sound
+function Playsound(ost)
 {
   switch (ost) {
   case 1:
