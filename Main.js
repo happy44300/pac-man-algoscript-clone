@@ -37,7 +37,7 @@ turtleEnabled = false;
 
 var GameMap;
 var initialiser = false;
-
+var won = false;
 var intro = ChargerSon('https://happy44300.github.io/intro.wav');
 
 var fantomes = ChargerSon(''); //mettre les url
@@ -101,7 +101,7 @@ function ini() {
   Initialiser();
   
   initialiser = false;
-  GameMap = crossing.slice();
+  GameMap = JSON.parse(JSON.stringify(crossing)); //deep copy
 
   pacman.width = 15;
   pacman.height = 15;
@@ -141,6 +141,7 @@ function ini() {
   
   Playsound(1);
   //setTimeout(function() { iniEnd(); }, 4000);
+  won = false;
   initialiser = true;
 }
 
@@ -248,8 +249,10 @@ function MapPixelToGrid(pos) {
 }
 
 function win() {
-  Ecrire("win");
-  ini();
+  if(won == false){ //function is called once
+    won = true;
+    ini();
+  }
 }
 
 function DrawGrid(grid) {
@@ -368,7 +371,8 @@ function Keypressed(k) {
     break;
   case 81:
     // emergency stop
-    Stop();
+    //Stop();
+      win();
   }
 
 }
