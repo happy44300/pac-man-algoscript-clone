@@ -40,7 +40,7 @@ var GameMap;
 
 
 
-var lastDir = []; //latest pacman dir, used for rendering
+var lastDir = [0,1]; //latest pacman dir, used for rendering
 var initialiser = false;
 
 var intro = ChargerSon('https://happy44300.github.io/intro.wav');
@@ -217,83 +217,6 @@ function draw() {
 function BasicIA() {}
 
 
-
-function BlinkyIA() {
-    //chase pacman
-    Blinky.x = MapGridToPixel(Blinky.i);
-    Blinky.y = MapGridToPixel(Blinky.k);
-    if (Blinky.moving == true) {
-        return;
-    }
-    pacmandir = [MapGridToPixel(Blinky.i) - pacman.x, MapGridToPixel(Blinky.k) - pacman.y]; //vector to pacman
-    Ecrire(pacmandir);
-    var bestang = 3.14;
-    var angle = 0;
-    var bestdir = 0;
-    var vectorx = 0;
-    var vectory = 0;
-    //choose best dir toward pacman by projecting x and y on the axis
-    //0:up, 1:down , 2:right, 3:left
-    if (Math.abs(pacmandir[0]) > Math.abs(pacmandir[1])) {
-
-        //move on x
-        if (pacmandir[0] < 0) {
-            bestdir = 0;
-        } else {
-            bestdir = 1;
-        }
-    } else {
-        //move on y
-        if (pacmandir[1] < 0) {
-            bestdir = 2;
-        } else {
-            bestdir = 3;
-        }
-    }
-    //Ecrire(bestdir);
-    if (Blinky.moving == true) {
-        return;
-    }
-    switch (bestdir) {
-        case 0:
-            Ecrire("here");
-            Moveto(Blinky.i, Blinky.k - 1, Blinky);
-            break;
-        case 1:
-            Moveto(Blinky.i, Blinky.k + 1, Blinky);
-            break;
-        case 2:
-            Ecrire("here");
-            Moveto(Blinky.i + 1, Blinky.k, Blinky);
-            break;
-        case 3:
-            Ecrire("here");
-            Moveto(Blinky.i - 1, Blinky.k, Blinky);
-            break;
-    }
-}
-
-
-
-function Moveto(i, k, obj) {
-    if (obj.moving == true) {
-        return;
-    }
-    obj.moving = true; //prevent multiple movement
-    if (obj.i - i != 0 && obj.k - k != 0) {
-        Ecrire("doublemove");
-    }
-    obj.i = i;
-    obj.k = k;
-    obj.x = i * 20;
-    obj.y = i * 20;
-    obj.moving = false;
-    return;
-}
-
-
-
-
 function MapGridToPixel(pos) {
     if (Array.isArray(pos)) {
         pos = gridpos.map(function(x) {
@@ -332,15 +255,9 @@ function DrawGrid(grid) {
         }
     }
     if (gome == false) {
-
         win();
-
     }
-
 }
-
-
-
 
 function collision(obj) {
     var clipOffset = obj.offset;
