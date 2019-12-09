@@ -97,10 +97,11 @@ var Inky = GridObject(); // i=8 k=10
 var Clyde = GridObject(); // i=9 k=9
 WaitPreload(ini);
 
-
-
 function ini() {
   Initialiser();
+  
+  initialiser = false;
+  GameMap = crossing.slice();
 
   pacman.width = 15;
   pacman.height = 15;
@@ -138,8 +139,6 @@ function ini() {
   Clyde.width = 10;
   Clyde.height =15;
   
-
-  GameMap = crossing.slice();
   Playsound(1);
   //setTimeout(function() { iniEnd(); }, 4000);
   initialiser = true;
