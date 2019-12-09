@@ -8,6 +8,8 @@
  Authors:Bilal Molli and Steve []
  Licensed under GNU General Public License v3.0
 */
+
+//variables
 var crossing = [
 
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //1
@@ -34,15 +36,9 @@ var crossing = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] //22
   ];
 
-
-
 var scale = 20;
+var speed = 0.5
 
-var speed = 0.5;
-
-
-
-//variables d'execution
 turtleEnabled = false;
 
 var GameMap;
@@ -59,11 +55,14 @@ var lose = ChargerSon('https://happy44300.github.io/pacman_death.wav');
 var ost = ChargerSon(''); //mettre les url
 var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
 
-
+var pacman = GridObject();
+var Blinky = GridObject(); //i =10 k=10
+var Pinky = GridObject(); //i =9 k=10
+var Inky = GridObject(); // i=8 k=10
+var Clyde = GridObject(); // i=9 k=9
 
 //Create prototype to instantiate object
 var GridObject = function() {
-
   var obj = {};
   obj.x = 15;
   obj.y = 15;
@@ -77,11 +76,8 @@ var GridObject = function() {
   obj.texture = 0;
   obj.moving = false;
   obj.lastDir = [0, 1];
-
   extend(obj, methods);
-
   return obj;
-
 };
 
 var extend = function(obj, methods) {
@@ -95,15 +91,6 @@ var methods = {
   }
 };
 
-
-
-var pacman = GridObject();
-
-//ghost use x y positioning in the grid and not in pixels as pacman
-var Blinky = GridObject(); //i =10 k=10
-var Pinky = GridObject(); //i =9 k=10
-var Inky = GridObject(); // i=8 k=10
-var Clyde = GridObject(); // i=9 k=9
 WaitPreload(ini);
 
 //set default value
@@ -164,7 +151,6 @@ function iniEnd() {
 }
 //shortcut check for pacman
 function Shortcut(obj) {
-
   if (obj.x > MapGridToPixel(18) && obj.y > MapGridToPixel(8)) {
     obj.x = MapGridToPixel(1) + obj.width; //offset
     obj.y = MapGridToPixel(9) + obj.height;
@@ -177,13 +163,10 @@ function Shortcut(obj) {
 
 //draw pacman from object
 function DrawPac(obj) {
-  //each of our sprite is 32*32
-  //ctx.drawImage(spritesheet, 0, 0, x*32, y*32, obj.x - 1/2* obj.width ,obj.y -1/2* obj.height, 32, 32);
-  //DrawImageObject(spritesheet,32,32,32,32);
   //since we can't load image due to CORS problems in algoscript, we draw pacman by hand
   var dir = 0;
   var useddir = [];
-  //since when pacman is stopped, obj.dir is [], we need to assign a value locally
+  //since when pacman is stopped, obj.dir is [], we need to assign a value
   if (obj.dir.length == 0) {
     useddir = obj.lastDir.slice();
   } else {
@@ -217,16 +200,13 @@ function DrawPac(obj) {
 //main loop
 function draw() {
   Initialiser();
-
   RectanglePlein(0, 0, 10000, 10000, "black"); //background
   DrawGrid(GameMap);
-
   //don't draw or move before everything is loaded
   if (initialiser == true) {
     if(dying == false && won == false){
     move(pacman);
     }
-    //RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
     DrawPac(pacman);
     DrawLife();
     RectanglePlein(Blinky.x, Blinky.y, Blinky.width, Pinky.height, "red");
@@ -236,8 +216,6 @@ function draw() {
     Shortcut(pacman);
   }
 }
-
-
 
 function BasicIA(obj) {
 
@@ -340,9 +318,7 @@ function collision(obj) {
   var gomehitbox = ctx.getImageData(obj.x - obj.width / 2, obj.y - obj.height / 2, obj.width * 2, obj.height * 2);
   for (i = 0; i < gomehitbox.data.length; i += 8) {
     if (gomehitbox.data[i] == 255 && gomehitbox.data[i + 1] == 255 && gomehitbox.data[i + 2] == 255) {
-
       if (GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0) {
-
         GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
         break;
       }
@@ -413,9 +389,7 @@ function Keypressed(k) {
   case 90:
     death();
     break;
-
   }
-
 }
 
 //play sound
