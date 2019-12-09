@@ -39,13 +39,13 @@ var GameMap;
 var initialiser = false;
 var won = false;
 var life = 3;
-var intro = ChargerSon('https://happy44300.github.io/intro.wav');
+var dying = false;
 
+var intro = ChargerSon('https://happy44300.github.io/intro.wav');
 var fantomes = ChargerSon(''); //mettre les url
 var waka = ChargerSon('https://happy44300.github.io/pac-man-waka-waka.mp3');
-
 var winSound = ChargerSon(''); //mettre les url
-var lose = ChargerSon(''); //mettre les url//mettre les url
+var lose = ChargerSon('https://happy44300.github.io/pacman_death.wav');
 var ost = ChargerSon(''); //mettre les url
 var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
 
@@ -74,8 +74,6 @@ var GridObject = function() {
 
 };
 
-
-
 var extend = function(obj, methods) {
   for (var key in methods) {
     obj[key] = methods[key];
@@ -101,9 +99,12 @@ WaitPreload(ini);
 function ini(mode) {
   Initialiser();
   initialiser = false;
+  dying = false;
   if (mode == undefined) { // hard reset vs soft reset
     GameMap = JSON.parse(JSON.stringify(crossing)); //deep copy
     life = 3;
+    Playsound(1);
+    setTimeout(function() { iniEnd(); }, 4000);
   }
   pacman.width = 15;
   pacman.height = 15;
@@ -140,18 +141,15 @@ function ini(mode) {
   Clyde.y = MapGridToPixel(Clyde.k);
   Clyde.width = 10;
   Clyde.height = 15;
-
-  Playsound(1);
-  //setTimeout(function() { iniEnd(); }, 4000);
   won = false;
-  initialiser = true;
+  if(mode != undefined){
+    initialiser = true;
+  }
 }
 
 function iniEnd() {
   initialiser = true;
 }
-
-
 
 function Shortcut(obj) {
 
@@ -214,7 +212,9 @@ function draw() {
 
   //don't draw or move before everything is loaded
   if (initialiser == true) {
+    if(dying == false && won == false){
     move(pacman);
+    }
     //RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
     DrawPac(pacman);
     DrawLife();
@@ -258,11 +258,13 @@ function win() {
 
 function death() {
   //playsound death
-  if (life > 0) {
+  Playsound(5);
+  dying = true;
+  if (life > 1) {
     life--;
-    ini(1);
+    setTimeout(function() { ini(1); }, 1500);
   } else {
-    ini();
+    setTimeout(function() { ini(); }, 1500);
   }
 }
 
