@@ -112,21 +112,32 @@ function ini() {
   Blinky.k = 10;
   Blinky.x = MapGridToPixel(Blinky.i);
   Blinky.y = MapGridToPixel(Blinky.k);
-
+  Blinky.width = 10
+  Blinky.height =15
+  
   Pinky.i = 9;
   Pinky.k = 10;
   Pinky.x = MapGridToPixel(Pinky.i);
   Pinky.y = MapGridToPixel(Pinky.k);
+  Pinky.width = 10
+  Pinky.height =15
+  
 
   Inky.i = 8;
   Inky.k = 10;
   Inky.x = MapGridToPixel(Inky.i);
   Inky.y = MapGridToPixel(Inky.k);
+  Inky.width = 10
+  Inky.height =15
+  
 
   Clyde.i = 7;
   Clyde.k = 10;
   Clyde.x = MapGridToPixel(Clyde.i);
   Clyde.y = MapGridToPixel(Clyde.k);
+  Clyde.width = 10
+  Clyde.height =15
+  
 
   GameMap = crossing.slice();
   Playsound(1);
