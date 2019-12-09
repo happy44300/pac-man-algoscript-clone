@@ -38,6 +38,7 @@ turtleEnabled = false;
 var GameMap;
 var initialiser = false;
 var won = false;
+var life = 3;
 var intro = ChargerSon('https://happy44300.github.io/intro.wav');
 
 var fantomes = ChargerSon(''); //mettre les url
@@ -65,7 +66,7 @@ var GridObject = function() {
   obj.dir = [];
   obj.texture = 0;
   obj.moving = false;
-  obj.lastDir = [0,1];
+  obj.lastDir = [0, 1];
 
   extend(obj, methods);
 
@@ -97,12 +98,13 @@ var Inky = GridObject(); // i=8 k=10
 var Clyde = GridObject(); // i=9 k=9
 WaitPreload(ini);
 
-function ini() {
+function ini(mode) {
   Initialiser();
-  
   initialiser = false;
-  GameMap = JSON.parse(JSON.stringify(crossing)); //deep copy
-
+  if (mode == undefined) { // hard reset vs soft reset
+    GameMap = JSON.parse(JSON.stringify(crossing)); //deep copy
+    life = 3;
+  }
   pacman.width = 15;
   pacman.height = 15;
   pacman.offset = -10;
@@ -114,31 +116,31 @@ function ini() {
   Blinky.x = MapGridToPixel(Blinky.i);
   Blinky.y = MapGridToPixel(Blinky.k);
   Blinky.width = 10;
-  Blinky.height =15;
-  
+  Blinky.height = 15;
+
   Pinky.i = 9;
   Pinky.k = 10;
   Pinky.x = MapGridToPixel(Pinky.i);
   Pinky.y = MapGridToPixel(Pinky.k);
   Pinky.width = 10;
-  Pinky.height =15;
-  
+  Pinky.height = 15;
+
 
   Inky.i = 8;
   Inky.k = 10;
   Inky.x = MapGridToPixel(Inky.i);
   Inky.y = MapGridToPixel(Inky.k);
   Inky.width = 10;
-  Inky.height =15;
-  
+  Inky.height = 15;
+
 
   Clyde.i = 9;
   Clyde.k = 9;
   Clyde.x = MapGridToPixel(Clyde.i);
   Clyde.y = MapGridToPixel(Clyde.k);
   Clyde.width = 10;
-  Clyde.height =15;
-  
+  Clyde.height = 15;
+
   Playsound(1);
   //setTimeout(function() { iniEnd(); }, 4000);
   won = false;
@@ -215,6 +217,7 @@ function draw() {
     move(pacman);
     //RectanglePlein(pacman.x, pacman.y, 10, 10, 'yellow');
     DrawPac(pacman);
+    DrawLife();
     RectanglePlein(Blinky.x, Blinky.y, Blinky.width, Pinky.height, "red");
     RectanglePlein(Pinky.x, Pinky.y, Pinky.width, Pinky.height, "pink");
     RectanglePlein(Inky.x, Inky.y, Inky.width, Pinky.height, "blue");
@@ -226,11 +229,9 @@ function draw() {
 
 
 function BasicIA(obj) {
-  
+
   var col; //for collision
-  
-  
-  
+
 }
 
 
@@ -249,10 +250,24 @@ function MapPixelToGrid(pos) {
 }
 
 function win() {
-  if(won == false){ //function is called once
+  if (won == false) { //function is called once
     won = true;
     ini();
   }
+}
+
+function death() {
+  //playsound death
+  if (life > 0) {
+    life--;
+    ini(1);
+  } else {
+    ini();
+  }
+}
+
+function DrawLife() {
+  Texte(MapGridToPixel(crossing[0].length), MapGridToPixel(crossing.length), "Life " + life.toString(), "white");
 }
 
 function DrawGrid(grid) {
@@ -371,8 +386,15 @@ function Keypressed(k) {
     break;
   case 81:
     // emergency stop
-    //Stop();
-      win();
+    Stop();
+    break;
+  case 65:
+    win();
+    break;
+  case 90:
+    death();
+    break;
+
   }
 
 }
