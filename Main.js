@@ -37,7 +37,7 @@ var crossing = [
   ];
 
 var scale = 20;
-var speed = 0.5
+var speed = 0.5;
 
 turtleEnabled = false;
 
