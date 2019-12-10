@@ -55,12 +55,6 @@ var lose = ChargerSon('https://happy44300.github.io/pacman_death.wav');
 var ost = ChargerSon(''); //mettre les url
 var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
 
-var pacman = GridObject();
-var Blinky = GridObject(); //i =10 k=10
-var Pinky = GridObject(); //i =9 k=10
-var Inky = GridObject(); // i=8 k=10
-var Clyde = GridObject(); // i=9 k=9
-
 //Create prototype to instantiate object
 var GridObject = function() {
   var obj = {};
@@ -90,6 +84,13 @@ var methods = {
     return MapGridToPixel([this.k, this.i]);
   }
 };
+
+var pacman = GridObject();
+var Blinky = GridObject(); //i =10 k=10
+var Pinky = GridObject(); //i =9 k=10
+var Inky = GridObject(); // i=8 k=10
+var Clyde = GridObject(); // i=9 k=9
+
 
 WaitPreload(ini);
 
@@ -223,7 +224,7 @@ function BasicIA(obj) {
 
 }
 
-//utility function to convert the maze array to pixel pos
+//utility function to convert the maze array index pos to pixel pos
 function MapGridToPixel(pos) {
   if (Array.isArray(pos)) {
     pos = gridpos.map(function(x) {
@@ -234,18 +235,17 @@ function MapGridToPixel(pos) {
   return pos * scale;
 }
 
-/*
+//utility function to convert pixel pos to grid pos
 function MapPixelToGrid(pos) {
   return Math.abs(Math.round((pos / scale)));
 }
-
+//win the game
 function win() {
   if (won == false) { //function is called once
     won = true;
     ini();
   }
 }
-*/
 
 //kill pac man
 function death() {
