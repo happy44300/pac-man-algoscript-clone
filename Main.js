@@ -62,7 +62,7 @@ var GridObject = function() {
   obj.y = 15;
   obj.i = 0;
   obj.k = 0;
-  obj.states = 0;
+  obj.status = 0;
   obj.width = 0;
   obj.height = 0;
   obj.offset = 0;
@@ -90,67 +90,82 @@ var Blinky = GridObject(); //i =10 k=10
 var Pinky = GridObject(); //i =9 k=10
 var Inky = GridObject(); // i=8 k=10
 var Clyde = GridObject(); // i=9 k=9
-
-
 WaitPreload(ini);
 
 //set default value
+
 function ini(mode) {
   Initialiser();
   initialiser = false;
   dying = false;
-  if (mode == undefined) { // hard reset vs soft reset
-    GameMap = JSON.parse(JSON.stringify(crossing)); //deep copy
+
+  //hard reset mode
+  if (mode == undefined) {
+    GameMap = JSON.parse(JSON.stringify(crossing)); //deep copy of the array
     life = 3;
     Playsound(1);
-    setTimeout(function() { iniEnd(); }, 4000);
+    setTimeout(function() {
+      iniEnd();
+    }, 4000);
   }
+
   pacman.width = 15;
   pacman.height = 15;
   pacman.offset = -10;
   pacman.x = MapGridToPixel(9);
   pacman.y = MapGridToPixel(12);
+  pacman.status = 1;
 
-  Blinky.i = 10;
-  Blinky.k = 10;
+  Blinky.i = 12;
+  Blinky.k = 9;
+  Blinky.offset = -10;
   Blinky.x = MapGridToPixel(Blinky.i);
   Blinky.y = MapGridToPixel(Blinky.k);
-  Blinky.width = 10;
+  Blinky.width = 15;
   Blinky.height = 15;
 
-  Pinky.i = 9;
-  Pinky.k = 10;
+  Pinky.i = 7;
+  Pinky.k = 8;
+  Pinky.offset = -10;
   Pinky.x = MapGridToPixel(Pinky.i);
   Pinky.y = MapGridToPixel(Pinky.k);
-  Pinky.width = 10;
+  Pinky.width = 15;
   Pinky.height = 15;
 
 
-  Inky.i = 8;
-  Inky.k = 10;
+  Inky.i = 10;
+  Inky.k = 8;
+  Inky.offset = -10;
   Inky.x = MapGridToPixel(Inky.i);
   Inky.y = MapGridToPixel(Inky.k);
-  Inky.width = 10;
+  Inky.width = 15;
   Inky.height = 15;
 
 
   Clyde.i = 9;
-  Clyde.k = 9;
+  Clyde.k = 8;
+  Clyde.offset = -10;
   Clyde.x = MapGridToPixel(Clyde.i);
   Clyde.y = MapGridToPixel(Clyde.k);
-  Clyde.width = 10;
+  Clyde.width = 15;
   Clyde.height = 15;
   won = false;
-  if(mode != undefined){
+  if (mode != undefined) {
     initialiser = true;
   }
+  initialiser = true;
 }
 
 //unfreeze game
+
+
 function iniEnd() {
   initialiser = true;
 }
+
 //shortcut check for pacman
+
+
 function Shortcut(obj) {
   if (obj.x > MapGridToPixel(18) && obj.y > MapGridToPixel(8)) {
     obj.x = MapGridToPixel(1) + obj.width; //offset
@@ -162,12 +177,15 @@ function Shortcut(obj) {
 }
 
 
+
 //draw pacman from object
+
+
 function DrawPac(obj) {
   //since we can't load image due to CORS problems in algoscript, we draw pacman by hand
   var dir = 0;
   var useddir = [];
-  //since when pacman is stopped, obj.dir is [], we need to assign a value
+  //since when pacman is stopped, obj.dir is [], we need to assign a remember the previous value
   if (obj.dir.length == 0) {
     useddir = obj.lastDir.slice();
   } else {
@@ -198,18 +216,25 @@ function DrawPac(obj) {
 }
 
 
+
 //main loop
+
+
 function draw() {
   Initialiser();
   RectanglePlein(0, 0, 10000, 10000, "black"); //background
   DrawGrid(GameMap);
   //don't draw or move before everything is loaded
   if (initialiser == true) {
-    if(dying == false && won == false){
-    move(pacman);
+    if (dying == false && won == false) {
+      move(pacman);
     }
     DrawPac(pacman);
     DrawLife();
+    BasicIA(Blinky);
+    BasicIA(Pinky);
+    BasicIA(Inky);
+    BasicIA(Clyde);
     RectanglePlein(Blinky.x, Blinky.y, Blinky.width, Pinky.height, "red");
     RectanglePlein(Pinky.x, Pinky.y, Pinky.width, Pinky.height, "pink");
     RectanglePlein(Inky.x, Inky.y, Inky.width, Pinky.height, "blue");
@@ -218,13 +243,47 @@ function draw() {
   }
 }
 
+
+//BasicAI for the ghosts, move in a random direction until it hit a wall
+
+
 function BasicIA(obj) {
 
-  var col; //for collision
+  //generate new direction and prevent object from going back and forth
+  while (obj.dir.length == 0 || (obj.dir[1] == -obj.lastDir[1] && obj.dir[0] == obj.lastDir[0])) {
+    obj.dir = GenerateRanDir();
+  }
+  //apply direction
+  move(obj);
+  obj.lastDir = obj.dir.slice();
+}
 
+function GenerateRanDir() {
+  var ran = Hasard(4);
+
+  switch (ran) {
+  case 0:
+    //up
+    return [1, -1];
+
+  case 1:
+    // down
+    return [1, 1];
+
+  case 2:
+    //gauche
+    return [0, -1];
+
+  case 3:
+    //droite
+    return [0, 1];
+
+  }
 }
 
 //utility function to convert the maze array index pos to pixel pos
+
+
 function MapGridToPixel(pos) {
   if (Array.isArray(pos)) {
     pos = gridpos.map(function(x) {
@@ -235,11 +294,18 @@ function MapGridToPixel(pos) {
   return pos * scale;
 }
 
+
 //utility function to convert pixel pos to grid pos
+
+
 function MapPixelToGrid(pos) {
   return Math.abs(Math.round((pos / scale)));
 }
+
+
 //win the game
+
+
 function win() {
   if (won == false) { //function is called once
     won = true;
@@ -248,24 +314,36 @@ function win() {
 }
 
 //kill pac man
+
+
 function death() {
   //playsound death
   Playsound(5);
   dying = true;
   if (life > 1) {
     life--;
-    setTimeout(function() { ini(1); }, 1500);
+    setTimeout(function() {
+      ini(1);
+    }, 1500);
   } else {
-    setTimeout(function() { ini(); }, 1500);
+    setTimeout(function() {
+      ini();
+    }, 1500);
   }
 }
 
+
 //draw life counter
+
+
 function DrawLife() {
   Texte(MapGridToPixel(crossing[0].length), MapGridToPixel(crossing.length), "Life " + life.toString(), "white");
 }
 
+
 //draw maze and win check
+
+
 function DrawGrid(grid) {
   if (grid == undefined) {
     return;
@@ -291,12 +369,14 @@ function DrawGrid(grid) {
   }
 }
 
+
 //handle object collision
+
+
 function collision(obj) {
   var clipOffset = obj.offset;
   var clipWidth = obj.width * 2;
-  var clipDepth = obj.height * 2;
-
+  var clipDepth = obj.width * 2; //clipDepth was later changed to search in a square 
   // extend hitboxe in the direction we are moving so that we don't get stuck when stopping
   if (obj.dir.length != 0 && obj.dir[0] == 0) {
     if (obj.dir[1] > 0) {
@@ -316,11 +396,14 @@ function collision(obj) {
   //extract image data from the canvas around the player
   var color = ctx.getImageData(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
   var gomehitbox = ctx.getImageData(obj.x - obj.width / 2, obj.y - obj.height / 2, obj.width * 2, obj.height * 2);
-  for (i = 0; i < gomehitbox.data.length; i += 8) {
-    if (gomehitbox.data[i] == 255 && gomehitbox.data[i + 1] == 255 && gomehitbox.data[i + 2] == 255) {
-      if (GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0) {
-        GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
-        break;
+
+  if (obj.status == 1) {
+    for (i = 0; i < gomehitbox.data.length; i += 8) {
+      if (gomehitbox.data[i] == 255 && gomehitbox.data[i + 1] == 255 && gomehitbox.data[i + 2] == 255) {
+        if (GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0) {
+          GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
+          break;
+        }
       }
     }
   }
@@ -331,33 +414,44 @@ function collision(obj) {
   }
 }
 
+
 //move object
+
+
 function move(obj) { // dir is an array with [coord to move, direction on the axis]
   if (collision(obj) == true) {
     obj.dir = [];
+    return;
   }
   if (obj.dir.length == 0) {
-    return obj;
+    return;
   }
   if (obj.dir[0] == 0) //move on x
   {
     if (obj.dir[1] == 1) {
       obj.x += speed;
+      return;
     } else {
       obj.x -= speed;
+      return;
     }
   }
   if (obj.dir[0] == 1) { //move on y
     if (obj.dir[1] == 1) {
       obj.y += speed;
+      return;
     } else {
       obj.y -= speed;
+      return;
     }
   }
-  return obj;
+  return;
 }
 
+
 //get keyboard input
+
+
 function Keypressed(k) {
   if (initialiser == false) {
     return;
@@ -379,22 +473,22 @@ function Keypressed(k) {
     //droite
     pacman.dir = [0, 1];
     break;
-  case 81:
-    // emergency stop
-    Stop();
-    break;
   case 65:
+    //instant win, used for debuging and testing purpose
     win();
     break;
   case 90:
+    //instant death, used for debuging and testing purpose
     death();
     break;
   }
 }
 
+
 //play sound
-function Playsound(ost)
-{
+
+
+function Playsound(ost) {
   switch (ost) {
   case 1:
     intro.play();
