@@ -48,11 +48,8 @@ var life = 3;
 var dying = false;
 
 var intro = ChargerSon('https://happy44300.github.io/intro.wav');
-var fantomes = ChargerSon(''); //mettre les url
 var waka = ChargerSon('https://happy44300.github.io/pac-man-waka-waka.mp3');
-var winSound = ChargerSon(''); //mettre les url
 var lose = ChargerSon('https://happy44300.github.io/pacman_death.wav');
-var ost = ChargerSon(''); //mettre les url
 var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
 
 //Create prototype to instantiate object
@@ -96,7 +93,7 @@ WaitPreload(ini);
 
 function ini(mode) {
   Initialiser();
-  initialiser = false;
+  initialiser = false; //freeze game
   dying = false;
 
   //hard reset mode
@@ -142,7 +139,7 @@ function ini(mode) {
   Inky.height = 15;
 
 
-  Clyde.i = 9;
+  Clyde.i = 8;
   Clyde.k = 8;
   Clyde.offset = -10;
   Clyde.x = MapGridToPixel(Clyde.i);
@@ -153,18 +150,15 @@ function ini(mode) {
   if (mode != undefined) {
     initialiser = true;
   }
-  initialiser = true;
 }
 
 //unfreeze game
-
 
 function iniEnd() {
   initialiser = true;
 }
 
 //shortcut check for pacman
-
 
 function Shortcut(obj) {
   if (obj.x > MapGridToPixel(18) && obj.y > MapGridToPixel(8)) {
@@ -180,12 +174,11 @@ function Shortcut(obj) {
 
 //draw pacman from object
 
-
 function DrawPac(obj) {
   //since we can't load image due to CORS problems in algoscript, we draw pacman by hand
   var dir = 0;
   var useddir = [];
-  //since when pacman is stopped, obj.dir is [], we need to assign a remember the previous value
+  //since when pacman is stopped, obj.dir = [], we need to assign a remember the previous value
   if (obj.dir.length == 0) {
     useddir = obj.lastDir.slice();
   } else {
@@ -219,33 +212,32 @@ function DrawPac(obj) {
 
 //main loop
 
-
 function draw() {
   Initialiser();
   RectanglePlein(0, 0, 10000, 10000, "black"); //background
   DrawGrid(GameMap);
-  //don't draw or move before everything is loaded
-  if (initialiser == true) {
-    if (dying == false && won == false) {
-      move(pacman);
-    }
-    DrawPac(pacman);
-    DrawLife();
+  DrawLife();
+
+  //don't move before everything is loaded & ready
+  if (dying == false && won == false && initialiser == true) {
+    
     BasicIA(Blinky);
     BasicIA(Pinky);
     BasicIA(Inky);
     BasicIA(Clyde);
+    
     RectanglePlein(Blinky.x, Blinky.y, Blinky.width, Pinky.height, "red");
     RectanglePlein(Pinky.x, Pinky.y, Pinky.width, Pinky.height, "pink");
     RectanglePlein(Inky.x, Inky.y, Inky.width, Pinky.height, "blue");
     RectanglePlein(Clyde.x, Clyde.y, Clyde.width, Pinky.height, "orange");
-    Shortcut(pacman);
+    move(pacman);// the order in witch pacman movement is called is very important because everything must be drawed for pixel based collision
+      DrawPac(pacman);
   }
+  Shortcut(pacman);
 }
 
 
 //BasicAI for the ghosts, move in a random direction until it hit a wall
-
 
 function BasicIA(obj) {
 
@@ -283,7 +275,6 @@ function GenerateRanDir() {
 
 //utility function to convert the maze array index pos to pixel pos
 
-
 function MapGridToPixel(pos) {
   if (Array.isArray(pos)) {
     pos = gridpos.map(function(x) {
@@ -297,14 +288,12 @@ function MapGridToPixel(pos) {
 
 //utility function to convert pixel pos to grid pos
 
-
 function MapPixelToGrid(pos) {
   return Math.abs(Math.round((pos / scale)));
 }
 
 
 //win the game
-
 
 function win() {
   if (won == false) { //function is called once
@@ -314,7 +303,6 @@ function win() {
 }
 
 //kill pac man
-
 
 function death() {
   //playsound death
@@ -335,14 +323,12 @@ function death() {
 
 //draw life counter
 
-
 function DrawLife() {
   Texte(MapGridToPixel(crossing[0].length), MapGridToPixel(crossing.length), "Life " + life.toString(), "white");
 }
 
 
 //draw maze and win check
-
 
 function DrawGrid(grid) {
   if (grid == undefined) {
@@ -360,7 +346,7 @@ function DrawGrid(grid) {
       if (grid[i][k] == 1 || grid[i][k] == 4) //draw gome
       {
         RectanglePlein(MapGridToPixel(k), MapGridToPixel(i), 5, 5, "white");
-        gome = true; //win check here because we loop here
+        gome = true; //win check here because we are in the loop here
       }
     }
   }
@@ -372,11 +358,10 @@ function DrawGrid(grid) {
 
 //handle object collision
 
-
 function collision(obj) {
   var clipOffset = obj.offset;
   var clipWidth = obj.width * 2;
-  var clipDepth = obj.width * 2; //clipDepth was later changed to search in a square 
+  var clipDepth = obj.width * 2; //clipDepth was later changed to search in a square
   // extend hitboxe in the direction we are moving so that we don't get stuck when stopping
   if (obj.dir.length != 0 && obj.dir[0] == 0) {
     if (obj.dir[1] > 0) {
@@ -394,21 +379,38 @@ function collision(obj) {
   var clipLength = clipWidth * clipDepth;
 
   //extract image data from the canvas around the player
-  var color = ctx.getImageData(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
-  var gomehitbox = ctx.getImageData(obj.x - obj.width / 2, obj.y - obj.height / 2, obj.width * 2, obj.height * 2);
-
+  var wallhitbox = ctx.getImageData(obj.x + clipOffset, obj.y + clipOffset, clipWidth, clipDepth);
+  var hitbox = ctx.getImageData(obj.x - obj.width / 2, obj.y - obj.height / 2, obj.width * 2, obj.height * 2);
+  
+ 
+  //loop on the pixels, +8 that way we don't loop on each pixel
   if (obj.status == 1) {
-    for (i = 0; i < gomehitbox.data.length; i += 8) {
-      if (gomehitbox.data[i] == 255 && gomehitbox.data[i + 1] == 255 && gomehitbox.data[i + 2] == 255) {
+     ctx.putImageData(hitbox,200,200);
+    for (i = 0; i < hitbox.data.length; i += 8) {
+      if (hitbox.data[i] == 255 && hitbox.data[i + 1] == 255 && hitbox.data[i + 2] == 255) {
         if (GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0) {
           GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
-          break;
         }
+      }
+      //blue ghost collision check
+      if (hitbox.data[i + 1] < 100 && hitbox.data[i + 2] == 255) {
+        death();
+      }
+      //red
+      if (hitbox.data[i] == 255 && hitbox.data[i + 1] == 0) {
+        death();
+      }
+      //orange
+      if (hitbox.data[i] > 200 && hitbox.data[i + 1] > 150 && hitbox.data[i + 2] < 100) {
+        death();
+      } //pink
+      if (hitbox.data[i] > 200 && hitbox.data[i + 1] < 200) {
+        death();
       }
     }
   }
-  for (var i = 0; i < color.data.length; i += 8) {
-    if (color.data[i + 2] > 100 && color.data[i] != 255) {
+  for (var i = 0; i < wallhitbox.data.length; i += 8) {
+    if (wallhitbox.data[i + 2] > 100 && wallhitbox.data[i] != 255) {
       return true;
     }
   }
@@ -416,7 +418,6 @@ function collision(obj) {
 
 
 //move object
-
 
 function move(obj) { // dir is an array with [coord to move, direction on the axis]
   if (collision(obj) == true) {
@@ -450,7 +451,6 @@ function move(obj) { // dir is an array with [coord to move, direction on the ax
 
 
 //get keyboard input
-
 
 function Keypressed(k) {
   if (initialiser == false) {
@@ -487,14 +487,10 @@ function Keypressed(k) {
 
 //play sound
 
-
 function Playsound(ost) {
   switch (ost) {
   case 1:
     intro.play();
-    break;
-  case 2:
-    fantomes.play();
     break;
   case 3:
     waka.play();
