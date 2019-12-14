@@ -50,7 +50,6 @@ var dying = false;
 var intro = ChargerSon('https://happy44300.github.io/intro.wav');
 var waka = ChargerSon('https://happy44300.github.io/pac-man-waka-waka.mp3');
 var lose = ChargerSon('https://happy44300.github.io/pacman_death.wav');
-var spritesheet = PreloadImage("https://happy44300.github.io/sprites32.png");
 
 //Create prototype to instantiate object
 var GridObject = function() {
@@ -87,10 +86,9 @@ var Blinky = GridObject(); //i =10 k=10
 var Pinky = GridObject(); //i =9 k=10
 var Inky = GridObject(); // i=8 k=10
 var Clyde = GridObject(); // i=9 k=9
-WaitPreload(ini);
 
 //set default value
-
+ini();
 function ini(mode) {
   Initialiser();
   initialiser = false; //freeze game
