@@ -9,6 +9,7 @@ An [algoscript](http://www.algoscript.info/) implementation of pacman
 
 ## Requirements
 An [algoscript](http://www.algoscript.info/) compatible browser, any modern browser should work.
+
 According to the algoscript documentation you can check [here](http://html5test.com/) how well your browser support algoscript.
 
 ## Quick start
