@@ -37,4 +37,6 @@ Use arrow to move, eat all the gomes (white dot), and avoid the ghost
 * On low performance computer, frame rate may very, witch may alter the speed of the game (Tested on a pc with a Ryzen 2600X CPU) 
 
 ## Quick code overview
-The code is centralised into a main loop that is executed avery frame
+We use javascript object to reuse code between pacman and ghost
+We use pixel data to perform collision hence the importance of the drawing order
+The code is centralised into a main loop that is executed avery frame that can be summed as following
