@@ -14,15 +14,18 @@ According to the algoscript documentation you can check [here](http://html5test.
 ## Quick start
 ### Runing the game
 Open [algoscript](http://www.algoscript.info/) in a new tab
+
 Open Main.js in this reposetory
+
 Copy paste the code in algoscript and run it
+
 Enjoy
 ### Playing the game
 
 Use arrow to move, eat all the gomes (white dot), and avoid the ghost
 
-*There is a shortcut as in the original pacman that only the player can use
-*You die when youre health counter reach 0
-*You win if you eat all gomes. In that case the game instantly restart
+* There is a shortcut as in the original pacman that only the player can use
+* You die when youre health counter reach 0
+* You win if you eat all gomes. In that case the game instantly restart
 
 NB: if you press A you instantly you win and Z you die but don't tell anyone i told you that
