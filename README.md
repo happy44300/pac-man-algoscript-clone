@@ -32,6 +32,9 @@ Use arrow to move, eat all the gomes (white dot), and avoid the ghost
 *NB: if you press A you instantly win and Z you die but don't tell anyone i told you that.*
 
 ## Know bug
-* Due to CORS (Cross Origin Ressource Security) error within algoscript, we can't load image from an exterior url 
+* Due to CORS (Cross-Origin Resource Sharing) error within algoscript, we can't load image from an exterior url
 * There is no sound mixer in algoscript, therefore we can't play multiple sound at once like the *waka waka* or ghost sound
 * On low performance computer, frame rate may very, witch may alter the speed of the game (Tested on a pc with a Ryzen 2600X CPU) 
+
+## Quick code overview
+The code is centralised into a main loop that is executed avery frame
