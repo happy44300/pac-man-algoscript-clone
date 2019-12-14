@@ -16,7 +16,7 @@ According to the algoscript documentation you can check [here](http://html5test.
 ### Runing the game
 Open [algoscript](http://www.algoscript.info/) in a new tab
 
-Open Main.js in this repository
+Open [Main.js](https://github.com/happy44300/pac-man-algoscript-clone/blob/master/Main.js) in this repository
 
 Copy paste the code in algoscript and run it
 
@@ -36,10 +36,3 @@ Use arrow to move, eat all the gomes (white dot), and avoid the ghost
 * There is no sound mixer in algoscript, therefore we can't play multiple sound at once like the *waka waka* or ghost sound
 * On low performance computer, frame rate may very, witch may alter the speed of the game (tested on a pc with a Ryzen 2600X CPU)
 * The super gomes that make the ghost weak ain't implemented
-
-## Quick code overview
-We use javascript object to reuse code between pacman and ghost
-
-We use pixel data to perform collision hence the importance of the drawing order
-
-The code is centralised into a main loop that is executed avery frame witch can be summed as following
