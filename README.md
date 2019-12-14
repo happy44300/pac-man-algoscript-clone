@@ -34,9 +34,11 @@ Use arrow to move, eat all the gomes (white dot), and avoid the ghost
 ## Know bug
 * Due to CORS (Cross-Origin Resource Sharing) error within algoscript, we can't load image from an exterior url
 * There is no sound mixer in algoscript, therefore we can't play multiple sound at once like the *waka waka* or ghost sound
-* On low performance computer, frame rate may very, witch may alter the speed of the game (Tested on a pc with a Ryzen 2600X CPU) 
+* On low performance computer, frame rate may very, witch may alter the speed of the game (tested on a pc with a Ryzen 2600X CPU) 
 
 ## Quick code overview
 We use javascript object to reuse code between pacman and ghost
+
 We use pixel data to perform collision hence the importance of the drawing order
+
 The code is centralised into a main loop that is executed avery frame that can be summed as following
