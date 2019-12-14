@@ -25,8 +25,8 @@ Enjoy
 
 Use arrow to move, eat all the gomes (white dot), and avoid the ghost
 
-* There is a shortcut as in the original pacman that only the player can use
-* You die when youre health counter reach 0
+* There is a shortcut as in the original pacman witch only the player can use
+* You die when youre health counter hit 0
 * You win if you eat all gomes. In that case the game instantly restart without animation.
 
 *NB: if you press A you instantly win and Z you die but don't tell anyone i told you that.*
