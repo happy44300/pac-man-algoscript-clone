@@ -2,10 +2,10 @@
 An [algoscript](http://www.algoscript.info/) implementation of pacman
 
 ## Features
-*Original pacman maze with working shortcut for pacman
-*Working game logic (collisions death, base elements for the game)
-*fully web based
-*Original intro and death sound
+* Original pacman maze with working shortcut for pacman
+* Working game logic (collisions death, base elements for the game)
+* fully web based
+* Original intro and death sound
 
 ## Requirements
 An [algoscript](http://www.algoscript.info/) compatible browser, any modern browser should work.
