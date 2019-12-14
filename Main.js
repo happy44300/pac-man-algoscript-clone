@@ -226,7 +226,7 @@ function draw() {
     
     RectanglePlein(Blinky.x, Blinky.y, Blinky.width, Pinky.height, "red");
     RectanglePlein(Pinky.x, Pinky.y, Pinky.width, Pinky.height, "pink");
-    RectanglePlein(Inky.x, Inky.y, Inky.width, Pinky.height, "blue");
+    RectanglePlein(Inky.x, Inky.y, Inky.width, Pinky.height, "cyan");
     RectanglePlein(Clyde.x, Clyde.y, Clyde.width, Pinky.height, "orange");
     move(pacman);// the order in witch pacman movement is called is very important because everything must be drawed for pixel based collision
       DrawPac(pacman);
@@ -383,7 +383,6 @@ function collision(obj) {
  
   //loop on the pixels, +8 that way we don't loop on each pixel
   if (obj.status == 1) {
-     ctx.putImageData(hitbox,200,200);
     for (i = 0; i < hitbox.data.length; i += 8) {
       if (hitbox.data[i] == 255 && hitbox.data[i + 1] == 255 && hitbox.data[i + 2] == 255) {
         if (GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] != 0) {
@@ -391,24 +390,28 @@ function collision(obj) {
         }
       }
       //blue ghost collision check
-      if (hitbox.data[i + 1] < 100 && hitbox.data[i + 2] == 255) {
+      if (hitbox.data[i+1] == 255 && hitbox.data[i + 2] == 255 && hitbox.data[i+1] == 0 ) {
         death();
+        break;
       }
       //red
       if (hitbox.data[i] == 255 && hitbox.data[i + 1] == 0) {
         death();
+        break;
       }
       //orange
       if (hitbox.data[i] > 200 && hitbox.data[i + 1] > 150 && hitbox.data[i + 2] < 100) {
         death();
+        break;
       } //pink
-      if (hitbox.data[i] > 200 && hitbox.data[i + 1] < 200) {
+      if (hitbox.data[i] > 100 && hitbox.data[i + 1] < 200) {
         death();
+        break;
       }
     }
   }
   for (var i = 0; i < wallhitbox.data.length; i += 8) {
-    if (wallhitbox.data[i + 2] > 100 && wallhitbox.data[i] != 255) {
+    if (wallhitbox.data[i + 2] > 100 && wallhitbox.data[i+1] != 255) {
       return true;
     }
   }
