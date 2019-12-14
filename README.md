@@ -43,4 +43,3 @@ We use javascript object to reuse code between pacman and ghost
 We use pixel data to perform collision hence the importance of the drawing order
 
 The code is centralised into a main loop that is executed avery frame witch can be summed as following
-![alt text](https://happy44300.github.io/Diagramme.PNG)
