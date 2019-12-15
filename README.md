@@ -1,6 +1,6 @@
 # pacman algoscript
 An [algoscript](http://www.algoscript.info/) implementation of pacman
-[](https://happy44300.github.io/Thumbnail.PNG)
+[logo]: (https://happy44300.github.io/Thumbnail.PNG)
 ## Features
 * Dynamically drawed maze
 * Working game logic such as collisions, death and win detection, life counter, rondomly moving ghost
