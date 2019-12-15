@@ -33,7 +33,7 @@ Pacman move in the selected direction until he hit a wall or another direction i
 avoid the ghost and eat all the gomes (white dot).
 **You die when your health counter hit 0, so be careful if you are at 1 life**
 
-There is also a shorcut as followed:
+There is also a shorcut between the side of the maze:
 <dl>
   <p align="center">
     <img src="https://happy44300.github.io/shortcut.png">
