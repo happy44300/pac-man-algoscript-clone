@@ -3,7 +3,7 @@ An [algoscript](http://www.algoscript.info/) implementation of pacman
 
 ## Features
 * Dynamically drawed maze
-* Working game logic such as collisions, death and win detection, life countern, rondomly moving ghost
+* Working game logic such as collisions, death and win detection, life counter, rondomly moving ghost
 * No files to dowload
 * Partial sound implementation
 
