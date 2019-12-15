@@ -5,8 +5,9 @@
  | .__/ \__,_|\___|_| |_| |_|\__,_|_| |_|
  |_|   
  
- Authors:Bilal Molli and Steve []
+ Authors:Bilal Molli and Steven Cailleau
  Licensed under GNU General Public License v3.0
+ Code available at https://github.com/happy44300/pac-man-algoscript-clone
 */
 
 //variables
@@ -70,6 +71,7 @@ var GridObject = function() {
   return obj;
 };
 
+//ended up unused
 var extend = function(obj, methods) {
   for (var key in methods) {
     obj[key] = methods[key];
@@ -235,7 +237,7 @@ function draw() {
 }
 
 
-//BasicAI for the ghosts, move in a random direction until it hit a wall
+//BasicAI for the ghosts, move in a random direction until we hit a wall
 
 function BasicIA(obj) {
 
