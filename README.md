@@ -8,9 +8,9 @@ An [algoscript](http://www.algoscript.info/) implementation of pacman
 
 ## Features
 * Dynamically drawed maze
-* Working game logic such as pixel based collisions, death and win detection, life counter, randomly moving ghost
+* Pixel based collisions detections
+* Randomly moving ghost
 * No files to download
-* Partial sound implementation such as new game sound and death sound.
 
 ## Requirements
 An [algoscript](http://www.algoscript.info/) compatible browser, any modern browser should work.
@@ -32,6 +32,13 @@ Use the keyboard arrow to move, eat all the gomes (white dot), and avoid the gho
 Pacman move in the selected direction until he hit a wall or another direction is given. You need to
 avoid the ghost and eat all the gomes (white dot).
 **You die when your health counter hit 0, so be careful if you are at 1 life**
+
+There is also a shorcut as followed:
+<dl>
+  <p align="center">
+    <img src="https://happy44300.github.io/shorcut.PNG">
+  </p>
+</dl>
 
 *NB: If you press A you instantly win and Z you instantly die but don't tell anyone i told you that*
 
