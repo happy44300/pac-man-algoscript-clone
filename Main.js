@@ -5,7 +5,7 @@
  | .__/ \__,_|\___|_| |_| |_|\__,_|_| |_|
  |_|   
  
- Authors:Bilal Molli and Steven Cailleau
+ Authors: Bilal Molli and Steven Cailleau
  Licensed under GNU General Public License v3.0
  Code available at https://github.com/happy44300/pac-man-algoscript-clone
 */
