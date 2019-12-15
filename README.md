@@ -26,7 +26,7 @@ Enjoy
 Use the keyboard arrow to move, eat all the gomes (white dot), and avoid the ghost.
 Pacman move in the selected direction until he hit a wall or another direction is given. You need to
 avoid the ghost and eat all the gomes (white dot).
-**You die when youre health counter hit 0, so be careful if you are at 1 life**
+**You die when your health counter hit 0, so be careful if you are at 1 life**
 
 *NB: if you press A you instantly win and Z you die but don't tell anyone i told you that.*
 
