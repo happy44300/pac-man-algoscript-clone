@@ -49,7 +49,6 @@ var life = 3;
 var dying = false;
 
 var intro = ChargerSon('https://happy44300.github.io/intro.wav');
-var waka = ChargerSon('https://happy44300.github.io/pac-man-waka-waka.mp3');
 var lose = ChargerSon('https://happy44300.github.io/pacman_death.wav');
 
 //Create prototype to instantiate object
@@ -391,8 +390,8 @@ function collision(obj) {
           GameMap[MapPixelToGrid(obj.y)][MapPixelToGrid(obj.x)] = 2;
         }
       }
-      //blue ghost collision check
-      if (hitbox.data[i+1] == 255 && hitbox.data[i + 2] == 255 && hitbox.data[i+1] == 0 ) {
+      //cyan ghost collision check
+      if (hitbox.data[i+1] > 200 && hitbox.data[i + 2] > 200 && hitbox.data[i] < 100 ) {
         death();
         break;
       }
@@ -494,12 +493,6 @@ function Playsound(ost) {
   switch (ost) {
   case 1:
     intro.play();
-    break;
-  case 3:
-    waka.play();
-    break;
-  case 4:
-    win.play();
     break;
   case 5:
     lose.play();
