@@ -2,10 +2,10 @@
 An [algoscript](http://www.algoscript.info/) implementation of pacman
 
 ## Features
-* Original pacman maze with working shortcut for pacman
+* Dynamically drawed maze
 * Working game logic (collisions, death, win, life counter)
-* fully web based
-* Original intro and death sound
+* No files to dowload
+* Partial sound implementation
 
 ## Requirements
 An [algoscript](http://www.algoscript.info/) compatible browser, any modern browser should work.
@@ -23,11 +23,10 @@ Copy paste the code in algoscript and run it
 Enjoy
 ### Playing the game
 
-Use arrow to move, eat all the gomes (white dot), and avoid the ghost
-
-* There is a shortcut as in the original pacman witch only the player can use
-* You die when youre health counter hit 0
-* You win if you eat all gomes. In that case the game instantly restart without animation.
+Use the keyboard arrow to move, eat all the gomes (white dot), and avoid the ghost.
+Pacman move in the selected direction until he hit a wall or another direction is given.
+Avoid the ghost and eat all the gomes (white dot).
+You die when youre health counter hit 0
 
 *NB: if you press A you instantly win and Z you die but don't tell anyone i told you that.*
 
