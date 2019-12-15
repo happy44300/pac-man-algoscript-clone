@@ -36,7 +36,7 @@ avoid the ghost and eat all the gomes (white dot).
 There is also a shorcut as followed:
 <dl>
   <p align="center">
-    <img src="https://happy44300.github.io/shorcut.PNG">
+    <img src="https://happy44300.github.io/shortcut.png">
   </p>
 </dl>
 
