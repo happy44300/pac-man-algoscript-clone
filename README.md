@@ -18,7 +18,7 @@ Open [algoscript](http://www.algoscript.info/) in a new tab
 
 Open [Main.js](https://github.com/happy44300/pac-man-algoscript-clone/blob/master/Main.js) in this repository
 
-Copy paste the code in algoscript and run it
+Copy paste the code from [Main.js](https://github.com/happy44300/pac-man-algoscript-clone/blob/master/Main.js) in algoscript and run it
 
 Enjoy
 ### Playing the game
