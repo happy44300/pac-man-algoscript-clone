@@ -8,9 +8,9 @@ An [algoscript](http://www.algoscript.info/) implementation of pacman
 
 ## Features
 * Dynamically drawed maze
-* Working game logic such as collisions, death and win detection, life counter, rondomly moving ghost
-* No files to dowload
-* Partial sound implementation
+* Working game logic such as pixel based collisions, death and win detection, life counter, randomly moving ghost
+* No files to download
+* Partial sound implementation such as new game sound and death sound.
 
 ## Requirements
 An [algoscript](http://www.algoscript.info/) compatible browser, any modern browser should work.
@@ -33,10 +33,10 @@ Pacman move in the selected direction until he hit a wall or another direction i
 avoid the ghost and eat all the gomes (white dot).
 **You die when your health counter hit 0, so be careful if you are at 1 life**
 
-*NB: if you press A you instantly win and Z you die but don't tell anyone i told you that.*
+*NB: If you press A you instantly win and Z you instantly die but don't tell anyone i told you that*
 
 ## Know bug
 * Due to CORS (Cross-Origin Resource Sharing) error within algoscript, we can't load ghost and pacman sprite
-* There is no sound mixer in algoscript, therefore we can't play multiple sound at once like the *waka waka* or ghost sound
-* On low performance computer, frame rate may very, witch may alter the speed of the game (tested on a pc with a Ryzen 2600X CPU)
+* There is no sound mixer in algoscript, therefore we can't play multiple sound at once like the *waka waka* or ambiant ghost sound
+* On low performance computer, frame rate may drop, witch may alter the speed of the game since the speed is tied to the frame rate (tested on a pc with a Ryzen 2600X CPU)
 * The super gomes that make the ghost weak are not implemented
